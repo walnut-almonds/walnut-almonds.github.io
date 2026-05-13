@@ -1,138 +1,12 @@
 <!DOCTYPE html>
 
-<html class="dark" lang="en">
+<html class="dark" lang="zh-TW">
 
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>SYSTEM_CORE // RESUME</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries">
-        document.addEventListener('DOMContentLoaded', () => {
-            const canvas = document.getElementById('three-canvas');
-            if (!canvas) return;
-
-            const scene = new THREE.Scene();
-            scene.fog = new THREE.FogExp2('#131313', 0.015);
-
-            const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.z = 25;
-
-            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-            const nodesCount = 150;
-            const connectionsCount = 450;
-            const radius = 10;
-
-            const nodesGeometry = new THREE.BufferGeometry();
-            const nodesPositions = new Float32Array(nodesCount * 3);
-            const nodesColors = new Float32Array(nodesCount * 3);
-
-            const nodeData = [];
-            const colors = [new THREE.Color('#00f3ff'), new THREE.Color('#ff00ff')];
-
-            for (let i = 0; i < nodesCount; i++) {
-                const i3 = i * 3;
-                const phi = Math.acos(-1 + (2 * i) / nodesCount);
-                const theta = Math.sqrt(nodesCount * Math.PI) * phi;
-
-                const r = radius + (Math.random() - 0.5) * 4;
-
-                const x = r * Math.cos(theta) * Math.sin(phi);
-                const y = r * Math.sin(theta) * Math.sin(phi);
-                const z = r * Math.cos(phi);
-
-                nodesPositions[i3] = x;
-                nodesPositions[i3 + 1] = y;
-                nodesPositions[i3 + 2] = z;
-
-                const color = colors[Math.floor(Math.random() * colors.length)];
-                nodesColors[i3] = color.r;
-                nodesColors[i3 + 1] = color.g;
-                nodesColors[i3 + 2] = color.b;
-
-                nodeData.push({ pos: new THREE.Vector3(x, y, z), color: color });
-            }
-
-            nodesGeometry.setAttribute('position', new THREE.BufferAttribute(nodesPositions, 3));
-            nodesGeometry.setAttribute('color', new THREE.BufferAttribute(nodesColors, 3));
-            const nodesMaterial = new THREE.PointsMaterial({ size: 0.18, vertexColors: true, transparent: true, opacity: 0.9 });
-            const nodesMesh = new THREE.Points(nodesGeometry, nodesMaterial);
-            scene.add(nodesMesh);
-
-            const lineMaterial = new THREE.LineBasicMaterial({ color: '#333333', transparent: true, opacity: 0.3 });
-            const lineGroup = new THREE.Group();
-
-            const pulses = [];
-
-            for (let i = 0; i < connectionsCount; i++) {
-                const idxA = Math.floor(Math.random() * nodesCount);
-                const idxB = Math.floor(Math.random() * nodesCount);
-                const nodeA = nodeData[idxA];
-                const nodeB = nodeData[idxB];
-
-                if (nodeA.pos.distanceTo(nodeB.pos) < 12) {
-                    const lineGeometry = new THREE.BufferGeometry().setFromPoints([nodeA.pos, nodeB.pos]);
-                    const line = new THREE.Line(lineGeometry, lineMaterial);
-                    lineGroup.add(line);
-
-                    if (Math.random() > 0.85) {
-                        pulses.push({
-                            start: nodeA.pos,
-                            end: nodeB.pos,
-                            color: nodeA.color,
-                            progress: Math.random(),
-                            speed: 0.005 + Math.random() * 0.01
-                        });
-                    }
-                }
-            }
-            scene.add(lineGroup);
-
-            const pulsePointGeo = new THREE.SphereGeometry(0.1, 8, 8);
-            const pulseMeshes = pulses.map((p) => {
-                const pulsePointMat = new THREE.MeshBasicMaterial({ color: p.color });
-                const m = new THREE.Mesh(pulsePointGeo, pulsePointMat);
-                scene.add(m);
-                return m;
-            });
-
-            const controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true;
-            controls.dampingFactor = 0.03;
-            controls.enableZoom = false;
-            controls.enablePan = false;
-            controls.autoRotate = true;
-            controls.autoRotateSpeed = 0.5;
-
-            function animate() {
-                requestAnimationFrame(animate);
-                const time = performance.now() * 0.001;
-
-                pulses.forEach((p, i) => {
-                    p.progress += p.speed;
-                    if (p.progress > 1) p.progress = 0;
-                    pulseMeshes[i].position.lerpVectors(p.start, p.end, p.progress);
-                    pulseMeshes[i].scale.setScalar(0.5 + Math.sin(time * 8 + i) * 0.5);
-                });
-
-                nodesMesh.rotation.y = time * 0.05;
-                lineGroup.rotation.y = time * 0.05;
-
-                controls.update();
-                renderer.render(scene, camera);
-            }
-
-            animate();
-
-            window.addEventListener('resize', () => {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
-            });
-        });
-    </script>
+    <title>KINETIC_ARCHIVE // ALGER HSU</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link
         href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;800;900&amp;family=Geist:wght@400;500&amp;display=swap"
         rel="stylesheet" />
@@ -140,260 +14,8 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
         rel="stylesheet" />
     <!-- Three.js and OrbitControls -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js">
-        document.addEventListener('DOMContentLoaded', () => {
-            const canvas = document.getElementById('three-canvas');
-            if (!canvas) return;
-
-            const scene = new THREE.Scene();
-            scene.fog = new THREE.FogExp2('#131313', 0.015);
-
-            const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.z = 25;
-
-            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-            const nodesCount = 150;
-            const connectionsCount = 450;
-            const radius = 10;
-
-            const nodesGeometry = new THREE.BufferGeometry();
-            const nodesPositions = new Float32Array(nodesCount * 3);
-            const nodesColors = new Float32Array(nodesCount * 3);
-
-            const nodeData = [];
-            const colors = [new THREE.Color('#00f3ff'), new THREE.Color('#ff00ff')];
-
-            for (let i = 0; i < nodesCount; i++) {
-                const i3 = i * 3;
-                const phi = Math.acos(-1 + (2 * i) / nodesCount);
-                const theta = Math.sqrt(nodesCount * Math.PI) * phi;
-
-                const r = radius + (Math.random() - 0.5) * 4;
-
-                const x = r * Math.cos(theta) * Math.sin(phi);
-                const y = r * Math.sin(theta) * Math.sin(phi);
-                const z = r * Math.cos(phi);
-
-                nodesPositions[i3] = x;
-                nodesPositions[i3 + 1] = y;
-                nodesPositions[i3 + 2] = z;
-
-                const color = colors[Math.floor(Math.random() * colors.length)];
-                nodesColors[i3] = color.r;
-                nodesColors[i3 + 1] = color.g;
-                nodesColors[i3 + 2] = color.b;
-
-                nodeData.push({ pos: new THREE.Vector3(x, y, z), color: color });
-            }
-
-            nodesGeometry.setAttribute('position', new THREE.BufferAttribute(nodesPositions, 3));
-            nodesGeometry.setAttribute('color', new THREE.BufferAttribute(nodesColors, 3));
-            const nodesMaterial = new THREE.PointsMaterial({ size: 0.18, vertexColors: true, transparent: true, opacity: 0.9 });
-            const nodesMesh = new THREE.Points(nodesGeometry, nodesMaterial);
-            scene.add(nodesMesh);
-
-            const lineMaterial = new THREE.LineBasicMaterial({ color: '#333333', transparent: true, opacity: 0.3 });
-            const lineGroup = new THREE.Group();
-
-            const pulses = [];
-
-            for (let i = 0; i < connectionsCount; i++) {
-                const idxA = Math.floor(Math.random() * nodesCount);
-                const idxB = Math.floor(Math.random() * nodesCount);
-                const nodeA = nodeData[idxA];
-                const nodeB = nodeData[idxB];
-
-                if (nodeA.pos.distanceTo(nodeB.pos) < 12) {
-                    const lineGeometry = new THREE.BufferGeometry().setFromPoints([nodeA.pos, nodeB.pos]);
-                    const line = new THREE.Line(lineGeometry, lineMaterial);
-                    lineGroup.add(line);
-
-                    if (Math.random() > 0.85) {
-                        pulses.push({
-                            start: nodeA.pos,
-                            end: nodeB.pos,
-                            color: nodeA.color,
-                            progress: Math.random(),
-                            speed: 0.005 + Math.random() * 0.01
-                        });
-                    }
-                }
-            }
-            scene.add(lineGroup);
-
-            const pulsePointGeo = new THREE.SphereGeometry(0.1, 8, 8);
-            const pulseMeshes = pulses.map((p) => {
-                const pulsePointMat = new THREE.MeshBasicMaterial({ color: p.color });
-                const m = new THREE.Mesh(pulsePointGeo, pulsePointMat);
-                scene.add(m);
-                return m;
-            });
-
-            const controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true;
-            controls.dampingFactor = 0.03;
-            controls.enableZoom = false;
-            controls.enablePan = false;
-            controls.autoRotate = true;
-            controls.autoRotateSpeed = 0.5;
-
-            function animate() {
-                requestAnimationFrame(animate);
-                const time = performance.now() * 0.001;
-
-                pulses.forEach((p, i) => {
-                    p.progress += p.speed;
-                    if (p.progress > 1) p.progress = 0;
-                    pulseMeshes[i].position.lerpVectors(p.start, p.end, p.progress);
-                    pulseMeshes[i].scale.setScalar(0.5 + Math.sin(time * 8 + i) * 0.5);
-                });
-
-                nodesMesh.rotation.y = time * 0.05;
-                lineGroup.rotation.y = time * 0.05;
-
-                controls.update();
-                renderer.render(scene, camera);
-            }
-
-            animate();
-
-            window.addEventListener('resize', () => {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
-            });
-        });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js">
-        document.addEventListener('DOMContentLoaded', () => {
-            const canvas = document.getElementById('three-canvas');
-            if (!canvas) return;
-
-            const scene = new THREE.Scene();
-            scene.fog = new THREE.FogExp2('#131313', 0.015);
-
-            const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.z = 25;
-
-            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-            const nodesCount = 150;
-            const connectionsCount = 450;
-            const radius = 10;
-
-            const nodesGeometry = new THREE.BufferGeometry();
-            const nodesPositions = new Float32Array(nodesCount * 3);
-            const nodesColors = new Float32Array(nodesCount * 3);
-
-            const nodeData = [];
-            const colors = [new THREE.Color('#00f3ff'), new THREE.Color('#ff00ff')];
-
-            for (let i = 0; i < nodesCount; i++) {
-                const i3 = i * 3;
-                const phi = Math.acos(-1 + (2 * i) / nodesCount);
-                const theta = Math.sqrt(nodesCount * Math.PI) * phi;
-
-                const r = radius + (Math.random() - 0.5) * 4;
-
-                const x = r * Math.cos(theta) * Math.sin(phi);
-                const y = r * Math.sin(theta) * Math.sin(phi);
-                const z = r * Math.cos(phi);
-
-                nodesPositions[i3] = x;
-                nodesPositions[i3 + 1] = y;
-                nodesPositions[i3 + 2] = z;
-
-                const color = colors[Math.floor(Math.random() * colors.length)];
-                nodesColors[i3] = color.r;
-                nodesColors[i3 + 1] = color.g;
-                nodesColors[i3 + 2] = color.b;
-
-                nodeData.push({ pos: new THREE.Vector3(x, y, z), color: color });
-            }
-
-            nodesGeometry.setAttribute('position', new THREE.BufferAttribute(nodesPositions, 3));
-            nodesGeometry.setAttribute('color', new THREE.BufferAttribute(nodesColors, 3));
-            const nodesMaterial = new THREE.PointsMaterial({ size: 0.18, vertexColors: true, transparent: true, opacity: 0.9 });
-            const nodesMesh = new THREE.Points(nodesGeometry, nodesMaterial);
-            scene.add(nodesMesh);
-
-            const lineMaterial = new THREE.LineBasicMaterial({ color: '#333333', transparent: true, opacity: 0.3 });
-            const lineGroup = new THREE.Group();
-
-            const pulses = [];
-
-            for (let i = 0; i < connectionsCount; i++) {
-                const idxA = Math.floor(Math.random() * nodesCount);
-                const idxB = Math.floor(Math.random() * nodesCount);
-                const nodeA = nodeData[idxA];
-                const nodeB = nodeData[idxB];
-
-                if (nodeA.pos.distanceTo(nodeB.pos) < 12) {
-                    const lineGeometry = new THREE.BufferGeometry().setFromPoints([nodeA.pos, nodeB.pos]);
-                    const line = new THREE.Line(lineGeometry, lineMaterial);
-                    lineGroup.add(line);
-
-                    if (Math.random() > 0.85) {
-                        pulses.push({
-                            start: nodeA.pos,
-                            end: nodeB.pos,
-                            color: nodeA.color,
-                            progress: Math.random(),
-                            speed: 0.005 + Math.random() * 0.01
-                        });
-                    }
-                }
-            }
-            scene.add(lineGroup);
-
-            const pulsePointGeo = new THREE.SphereGeometry(0.1, 8, 8);
-            const pulseMeshes = pulses.map((p) => {
-                const pulsePointMat = new THREE.MeshBasicMaterial({ color: p.color });
-                const m = new THREE.Mesh(pulsePointGeo, pulsePointMat);
-                scene.add(m);
-                return m;
-            });
-
-            const controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true;
-            controls.dampingFactor = 0.03;
-            controls.enableZoom = false;
-            controls.enablePan = false;
-            controls.autoRotate = true;
-            controls.autoRotateSpeed = 0.5;
-
-            function animate() {
-                requestAnimationFrame(animate);
-                const time = performance.now() * 0.001;
-
-                pulses.forEach((p, i) => {
-                    p.progress += p.speed;
-                    if (p.progress > 1) p.progress = 0;
-                    pulseMeshes[i].position.lerpVectors(p.start, p.end, p.progress);
-                    pulseMeshes[i].scale.setScalar(0.5 + Math.sin(time * 8 + i) * 0.5);
-                });
-
-                nodesMesh.rotation.y = time * 0.05;
-                lineGroup.rotation.y = time * 0.05;
-
-                controls.update();
-                renderer.render(scene, camera);
-            }
-
-            animate();
-
-            window.addEventListener('resize', () => {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
-            });
-        });
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -483,83 +105,7 @@
             }
         }
     </script>
-    <style>
-        body {
-            background-color: #131313;
-            color: #e2e2e2;
-            background-image:
-                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-            background-size: 64px 64px;
-            background-position: center top;
-        }
-
-        .glass-panel {
-            background: rgba(19, 19, 19, 0.4);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-        }
-
-        .border-line {
-            border: 1px solid rgba(255, 255, 255, 0.15);
-        }
-
-        .glow-hover:hover {
-            box-shadow: inset 0 0 20px rgba(179, 198, 243, 0.1);
-            border-color: rgba(179, 198, 243, 0.5);
-        }
-
-        /* Minimalist Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #131313;
-            border-left: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #444748;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #8e9192;
-        }
-
-        #particle-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-        }
-
-        #three-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            cursor: grab;
-        }
-
-        #three-canvas:active {
-            cursor: grabbing;
-        }
-
-        /* Ensure overlay allows pointer events through to canvas */
-        .pointer-events-none-except-buttons {
-            pointer-events: none;
-        }
-
-        .pointer-events-none-except-buttons a,
-        .pointer-events-none-except-buttons button {
-            pointer-events: auto;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body class="font-body-md text-body-md antialiased min-h-screen flex flex-col">
@@ -576,13 +122,13 @@
                     href="https://chat.qrumi.org/" target="_blank">TALKREALM</a>
                 <a class="text-primary border-b border-primary pb-1 px-2 py-1 hover:bg-primary hover:text-background transition-none"
                     href="#">RESUME</a>
-                <!-- <a class="text-on-surface-variant hover:bg-primary hover:text-background transition-none px-2 py-1"
-                    href="#">CONTACT</a> -->
+                <a class="text-on-surface-variant hover:bg-primary hover:text-background transition-none px-2 py-1"
+                    href="mailto:ewew61212@gmail.com">CONTACT</a>
             </nav>
-            <button
+            <a href="mailto:ewew61212@gmail.com"
                 class="hidden md:block font-label-mono text-label-mono uppercase tracking-widest border-line px-4 py-2 hover:bg-primary hover:text-background transition-none">
                 HIRE_ME
-            </button>
+            </a>
             <button class="md:hidden text-primary">
                 <span class="material-symbols-outlined">menu</span>
             </button>
@@ -615,156 +161,339 @@
                 </div>
             </div>
         </section>
-        <!-- Resume Section (Bento Grid Layout) -->
+        <!-- Resume Section -->
         <section
             class="pt-24 pb-32 max-w-[1440px] mx-auto w-full px-margin-mobile md:px-margin-desktop grid grid-cols-1 lg:grid-cols-12 gap-8"
             id="resume">
-            <!-- Sidebar (Skills & Ed) -->
+            <!-- ===== LEFT SIDEBAR (4 cols) ===== -->
             <div class="lg:col-span-4 flex flex-col gap-8">
+
                 <!-- Identity Card -->
                 <div class="border-line p-8 flex flex-col gap-6 glow-hover bg-surface/50 backdrop-blur-sm">
                     <div>
-                        <h2 class="font-headline-md text-headline-md text-primary">SYSTEM_CORE</h2>
-                        <p class="font-label-mono text-label-mono text-secondary tracking-widest mt-2">// SENIOR
-                            ENGINEER</p>
+                        <h2 class="font-headline-md text-headline-md text-primary leading-tight">許凱傑</h2>
+                        <p
+                            class="font-display-lg-mobile text-body-lg font-semibold text-on-surface tracking-tight mt-1">
+                            Alger Hsu</p>
+                        <p class="font-label-mono text-label-mono text-secondary tracking-widest mt-2">// GO / BACKEND
+                            SOFTWARE DEVELOPER</p>
                     </div>
                     <div class="border-t border-white/10 pt-6">
                         <ul class="space-y-4 font-label-mono text-label-mono text-on-surface-variant">
                             <li class="flex items-center gap-3">
-                                <span class="material-symbols-outlined text-secondary">location_on</span>
-                                LOCATION: SAN FRANCISCO, CA
+                                <span class="material-symbols-outlined text-secondary text-[18px]">location_on</span>
+                                TAIPEI, TAIWAN
                             </li>
                             <li class="flex items-center gap-3">
-                                <span class="material-symbols-outlined text-secondary">mail</span>
-                                PING: INIT@SYSTEM.CORE
+                                <span class="material-symbols-outlined text-secondary text-[18px]">mail</span>
+                                <a href="mailto:ewew61212@gmail.com"
+                                    class="hover:text-primary transition-none break-all">ewew61212@gmail.com</a>
                             </li>
                             <li class="flex items-center gap-3">
-                                <span class="material-symbols-outlined text-secondary">terminal</span>
-                                STATUS: AWAITING INPUT
+                                <span class="material-symbols-outlined text-secondary text-[18px]">call</span>
+                                +886 972-995-881
                             </li>
                         </ul>
                     </div>
+                    <!-- Social Links -->
+                    <div class="border-t border-white/10 pt-6 flex flex-wrap gap-3">
+                        <a href="https://github.com/walnut-almonds" target="_blank"
+                            class="border-line px-3 py-1.5 font-label-mono text-label-sm text-on-surface hover:bg-primary hover:text-background transition-none flex items-center gap-1.5">
+                            <span class="material-symbols-outlined text-[14px]">code</span>GITHUB
+                        </a>
+                        <a href="https://www.linkedin.com/in/kai-jie-hsu-b895a5265" target="_blank"
+                            class="border-line px-3 py-1.5 font-label-mono text-label-sm text-on-surface hover:bg-primary hover:text-background transition-none flex items-center gap-1.5">
+                            <span class="material-symbols-outlined text-[14px]">link</span>LINKEDIN
+                        </a>
+                        <a href="https://www.cake.me/ewew61212" target="_blank"
+                            class="border-line px-3 py-1.5 font-label-mono text-label-sm text-on-surface hover:bg-primary hover:text-background transition-none flex items-center gap-1.5">
+                            <span class="material-symbols-outlined text-[14px]">description</span>CAKE
+                        </a>
+                        <a href="https://medium.com/@ewew61212" target="_blank"
+                            class="border-line px-3 py-1.5 font-label-mono text-label-sm text-on-surface hover:bg-primary hover:text-background transition-none flex items-center gap-1.5">
+                            <span class="material-symbols-outlined text-[14px]">article</span>MEDIUM
+                        </a>
+                    </div>
                 </div>
-                <!-- Skills Area -->
+
+                <!-- Technical Skills -->
                 <div class="border-line p-8 flex flex-col gap-6 glow-hover bg-surface/50 backdrop-blur-sm">
                     <h3
                         class="font-label-mono text-label-mono text-primary tracking-widest border-b border-white/10 pb-4">
                         // TECHNICAL PARAMS</h3>
-                    <div class="space-y-6">
+                    <div class="space-y-5">
                         <div>
-                            <h4 class="font-body-md text-body-md text-secondary mb-3">LANGUAGES</h4>
+                            <h4 class="font-body-md text-body-md text-secondary mb-2">LANGUAGES</h4>
                             <div class="flex flex-wrap gap-2">
+                                <span
+                                    class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">GOLANG</span>
+                                <span
+                                    class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">PHP</span>
                                 <span
                                     class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">TYPESCRIPT</span>
                                 <span
-                                    class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">RUST</span>
-                                <span
                                     class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">PYTHON</span>
-                                <span
-                                    class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">GO</span>
                             </div>
                         </div>
                         <div>
-                            <h4 class="font-body-md text-body-md text-secondary mb-3">FRAMEWORKS &amp; ARCHITECTURE</h4>
+                            <h4 class="font-body-md text-body-md text-secondary mb-2">DATABASES</h4>
                             <div class="flex flex-wrap gap-2">
-                                <span class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">REACT
-                                    / NEXT.JS</span>
                                 <span
-                                    class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">NODE.JS</span>
+                                    class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">MYSQL</span>
                                 <span
-                                    class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">KUBERNETES</span>
-                                <span class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">AWS /
-                                    GCP</span>
+                                    class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">MONGODB</span>
+                                <span
+                                    class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">REDIS</span>
                                 <span
                                     class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">POSTGRESQL</span>
+                                <span
+                                    class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">ELASTICSEARCH</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-body-md text-body-md text-secondary mb-2">CLOUD &amp; CI/CD</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span
+                                    class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">AWS</span>
+                                <span
+                                    class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">GCP</span>
+                                <span
+                                    class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">DOCKER</span>
+                                <span
+                                    class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">TERRAFORM</span>
+                                <span
+                                    class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">ANSIBLE</span>
+                                <span
+                                    class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">GITLABCI</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-body-md text-body-md text-secondary mb-2">MONITORING &amp; MESSAGING</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span
+                                    class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">PROMETHEUS</span>
+                                <span
+                                    class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">GRAFANA</span>
+                                <span
+                                    class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">KAFKA</span>
+                                <span
+                                    class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">GRPC</span>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- Other Skills -->
+                <div class="border-line p-8 flex flex-col gap-6 glow-hover bg-surface/50 backdrop-blur-sm">
+                    <h3
+                        class="font-label-mono text-label-mono text-primary tracking-widest border-b border-white/10 pb-4">
+                        // OTHER SKILLS</h3>
+                    <div class="space-y-5">
+                        <div>
+                            <h4 class="font-body-md text-body-md text-secondary mb-2">DESIGN</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span
+                                    class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">BLENDER</span>
+                                <span
+                                    class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">MAYA</span>
+                                <span
+                                    class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">PHOTOSHOP</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-body-md text-body-md text-secondary mb-2">GAME ENGINE</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span
+                                    class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">UNITY</span>
+                                <span
+                                    class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">UNREAL</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-body-md text-body-md text-secondary mb-2">LANGUAGES</h4>
+                            <ul class="space-y-2 font-label-mono text-label-mono text-on-surface-variant">
+                                <li class="flex justify-between"><span>中文 (繁體)</span><span
+                                        class="text-secondary">NATIVE</span></li>
+                                <li class="flex justify-between"><span>JAPANESE</span><span class="text-secondary">JLPT
+                                        N2</span></li>
+                                <li class="flex justify-between"><span>ENGLISH</span><span
+                                        class="text-secondary">BASIC</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Education -->
                 <div class="border-line p-8 flex flex-col gap-6 glow-hover bg-surface/50 backdrop-blur-sm">
                     <h3
                         class="font-label-mono text-label-mono text-primary tracking-widest border-b border-white/10 pb-4">
-                        // CORE TRAINING</h3>
+                        // EDUCATION</h3>
                     <div>
-                        <h4 class="font-body-lg text-body-lg text-primary">B.S. COMPUTER SCIENCE</h4>
-                        <p class="font-label-mono text-label-mono text-secondary tracking-widest mt-1">UNIVERSITY OF
-                            TECHNOLOGY // 2018</p>
-                        <p class="font-body-md text-body-md text-on-surface-variant mt-3">
-                            Focus on Distributed Systems and Machine Learning architectures.
+                        <h4 class="font-body-lg text-body-lg text-primary font-semibold">德明財經科技大學</h4>
+                        <p class="font-body-md text-body-md text-on-surface mt-0.5">資訊科技系</p>
+                        <p class="font-label-mono text-label-mono text-secondary tracking-widest mt-2">2015/09 — 2019/06
                         </p>
+                        <ul class="space-y-2 font-body-md text-body-md text-on-surface-variant mt-4">
+                            <li class="flex gap-2"><span class="text-secondary">-</span>積極參與 ICPC、CPE 競賽</li>
+                            <li class="flex gap-2"><span class="text-secondary">-</span>自走車比賽季軍</li>
+                            <li class="flex gap-2"><span class="text-secondary">-</span>畢業專題研究自平衡車系統</li>
+                        </ul>
                     </div>
                 </div>
+
             </div>
-            <!-- Main Column (Experience & Projects) -->
+
+            <!-- ===== RIGHT MAIN COLUMN (8 cols) ===== -->
             <div class="lg:col-span-8 flex flex-col gap-8">
-                <!-- Experience Block -->
-                <div class="border-line p-8 md:p-12 flex flex-col gap-10 glow-hover bg-surface/50 backdrop-blur-sm">
+
+                <!-- About Me -->
+                <div class="border-line p-8 md:p-10 flex flex-col gap-4 glow-hover bg-surface/50 backdrop-blur-sm">
+                    <h3
+                        class="font-label-mono text-label-mono text-primary tracking-widest border-b border-white/10 pb-4">
+                        // ABOUT_ME</h3>
+                    <p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+                        我是來自台灣台北的電腦工程師，熱愛程式設計、開發和解決問題，希望能夠從事程式相關的任何工作，想體驗各種不同的技術領域，持續學習和成長。
+                    </p>
+                </div>
+
+                <!-- Experience -->
+                <div class="border-line p-8 md:p-10 flex flex-col gap-10 glow-hover bg-surface/50 backdrop-blur-sm">
                     <h3
                         class="font-label-mono text-label-mono text-primary tracking-widest border-b border-white/10 pb-4">
                         // OPERATIONAL HISTORY</h3>
-                    <!-- Job 1 -->
+
+                    <!-- Job 1: Wise Point -->
                     <div class="relative pl-6 border-l border-white/15">
                         <div class="absolute w-3 h-3 bg-secondary rounded-full -left-[6.5px] top-2"></div>
-                        <div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-4">
-                            <h4 class="font-headline-md text-headline-md text-primary">LEAD ARCHITECT</h4>
+                        <div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-1">
+                            <h4 class="font-headline-md text-headline-md text-primary leading-tight">CDN 工程師</h4>
                             <span
-                                class="font-label-mono text-label-mono text-secondary tracking-widest mt-2 md:mt-0">2021
-                                - PRESENT // NEXUS CORP</span>
+                                class="font-label-mono text-label-mono text-secondary tracking-widest mt-1 md:mt-0 shrink-0">2023/05
+                                — 2023/09</span>
                         </div>
+                        <p class="font-label-mono text-label-mono text-on-surface-variant mb-4">
+                            <a href="https://wisepointtech.com/" target="_blank"
+                                class="hover:text-primary transition-none">端點智能科技有限公司 (Wise Point Solutions
+                                Technology)</a>
+                        </p>
                         <ul class="list-none space-y-3 font-body-md text-body-md text-on-surface-variant">
-                            <li class="flex gap-3">
-                                <span class="text-secondary">-</span>
-                                Architected and deployed a microservices ecosystem scaling to 5M+ daily active users,
-                                reducing latency by 40%.
-                            </li>
-                            <li class="flex gap-3">
-                                <span class="text-secondary">-</span>
-                                Directed a team of 12 engineers in migrating legacy monoliths to containerized
-                                Kubernetes clusters.
-                            </li>
-                            <li class="flex gap-3">
-                                <span class="text-secondary">-</span>
-                                Implemented stringent zero-trust security protocols across all internal networking
-                                layers.
-                            </li>
+                            <li class="flex gap-3"><span class="text-secondary shrink-0">-</span>承接並擴展既有 AWS Terraform
+                                IaC 代碼庫，提升基礎設施可維護性與跨環境的可重複使用性</li>
+                            <li class="flex gap-3"><span class="text-secondary shrink-0">-</span>將 GCP 納入多雲策略，從零開始以
+                                Terraform 建置 GCP 基礎設施，統一雙雲平台的 IaC 開發規範與部署流程</li>
+                            <li class="flex gap-3"><span class="text-secondary shrink-0">-</span>使用 Ansible 撰寫 Playbook
+                                進行伺服器組態管理與應用程式部署自動化</li>
+                            <li class="flex gap-3"><span class="text-secondary shrink-0">-</span>部署並維運多套 Prometheus +
+                                Grafana 監控堆疊，涵蓋各雲端節點與服務的指標收集、儀表板視覺化及告警規則設定，並將告警推播至 Telegram</li>
+                            <li class="flex gap-3"><span class="text-secondary shrink-0">-</span>診斷既有服務嚴重的 API
+                                延遲問題，快速設計並實作 APICache Service 作為過渡方案，響應速度提升至 0.5 秒內</li>
+                            <li class="flex gap-3"><span class="text-secondary shrink-0">-</span>負責 CDN
+                                正式架構的技術選型與方案評估，與團隊共同制定最終架構設計與技術路線</li>
                         </ul>
+                        <div class="flex flex-wrap gap-2 mt-5">
+                            <span class="font-label-mono text-label-sm text-outline">GOLANG</span>
+                            <span class="font-label-mono text-label-sm text-outline">POSTGRESQL</span>
+                            <span class="font-label-mono text-label-sm text-outline">REDIS</span>
+                            <span class="font-label-mono text-label-sm text-outline">TERRAFORM</span>
+                            <span class="font-label-mono text-label-sm text-outline">ANSIBLE</span>
+                            <span class="font-label-mono text-label-sm text-outline">AWS</span>
+                            <span class="font-label-mono text-label-sm text-outline">GCP</span>
+                            <span class="font-label-mono text-label-sm text-outline">GITLABCI</span>
+                            <span class="font-label-mono text-label-sm text-outline">PROMETHEUS</span>
+                            <span class="font-label-mono text-label-sm text-outline">GRAFANA</span>
+                        </div>
                     </div>
-                    <!-- Job 2 -->
+
+                    <!-- Job 2: Paradise-Soft -->
                     <div class="relative pl-6 border-l border-white/15">
                         <div
                             class="absolute w-3 h-3 bg-surface-variant rounded-full border border-white/30 -left-[6.5px] top-2">
                         </div>
-                        <div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-4">
-                            <h4 class="font-headline-md text-headline-md text-primary">FULL STACK ENGINEER</h4>
+                        <div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-1">
+                            <h4 class="font-headline-md text-headline-md text-primary leading-tight">Backend Developer
+                            </h4>
                             <span
-                                class="font-label-mono text-label-mono text-secondary tracking-widest mt-2 md:mt-0">2018
-                                - 2021 // AETHER DYNAMICS</span>
+                                class="font-label-mono text-label-mono text-secondary tracking-widest mt-1 md:mt-0 shrink-0">2019/08
+                                — 2023/05</span>
                         </div>
+                        <p class="font-label-mono text-label-mono text-on-surface-variant mb-4">天堂遊戲有限公司 (Paradise-Soft)
+                        </p>
+                        <p class="font-body-md text-body-md text-on-surface-variant mb-4">主要使用
+                            Golang，負責設計與開發數據整合與處理系統，涵蓋 Web 爬蟲開發、自動化資訊收集與存儲，並開發獨立後端模組與 API 協助其他團隊</p>
                         <ul class="list-none space-y-3 font-body-md text-body-md text-on-surface-variant">
-                            <li class="flex gap-3">
-                                <span class="text-secondary">-</span>
-                                Built high-performance, reactive user interfaces utilizing React and WebGL for data
-                                visualization.
+                            <li class="flex gap-3"><span
+                                    class="text-secondary shrink-0">-</span>開發彩票數據爬蟲與分析系統，提供即時彩票數據與分析結果，並製作彩票分析網站進行導流
                             </li>
-                            <li class="flex gap-3">
-                                <span class="text-secondary">-</span>
-                                Designed and maintained GraphQL APIs interfacing with distributed Postgres databases.
-                            </li>
-                            <li class="flex gap-3">
-                                <span class="text-secondary">-</span>
-                                Optimized CI/CD pipelines, cutting deployment times from 45 minutes to under 5 minutes.
+                            <li class="flex gap-3"><span
+                                    class="text-secondary shrink-0">-</span>開發體育數據爬蟲並整合付費第三方資料源，實現即時賽事數據供應，建置體育分析網站</li>
+                            <li class="flex gap-3"><span
+                                    class="text-secondary shrink-0">-</span>獨立開發股指彩票數據爬蟲與資料收集系統，為公司主要業務平台拓展新玩法與增值服務</li>
+                            <li class="flex gap-3"><span class="text-secondary shrink-0">-</span>對 DWH
+                                專案進行系統性重構，消除重複程式碼，降低模組間耦合度與增加長期可維護性</li>
+                            <li class="flex gap-3"><span class="text-secondary shrink-0">-</span>重新設計新 Crawler
+                                架構，優化爬取效率與系統穩定性，並擴充多項數據採集功能</li>
+                            <li class="flex gap-3"><span class="text-secondary shrink-0">-</span>支援並參與錢包服務的後端功能開發</li>
+                            <li class="flex gap-3"><span
+                                    class="text-secondary shrink-0">-</span>針對美術組的重複性作業流程開發自動化腳本工具，大幅提升工作效率並有效降低人為失誤
                             </li>
                         </ul>
+                        <div class="flex flex-wrap gap-2 mt-5">
+                            <span class="font-label-mono text-label-sm text-outline">GOLANG</span>
+                            <span class="font-label-mono text-label-sm text-outline">MYSQL</span>
+                            <span class="font-label-mono text-label-sm text-outline">MONGODB</span>
+                            <span class="font-label-mono text-label-sm text-outline">REDIS</span>
+                            <span class="font-label-mono text-label-sm text-outline">ELASTICSEARCH</span>
+                            <span class="font-label-mono text-label-sm text-outline">KAFKA</span>
+                            <span class="font-label-mono text-label-sm text-outline">GRPC</span>
+                            <span class="font-label-mono text-label-sm text-outline">GITLABCI</span>
+                            <span class="font-label-mono text-label-sm text-outline">DOCKER</span>
+                        </div>
+                    </div>
+
+                    <!-- Job 3: Singularity -->
+                    <div class="relative pl-6 border-l border-white/15">
+                        <div
+                            class="absolute w-3 h-3 bg-surface-variant rounded-full border border-white/30 -left-[6.5px] top-2">
+                        </div>
+                        <div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-1">
+                            <h4 class="font-headline-md text-headline-md text-primary leading-tight">軟體工程師</h4>
+                            <span
+                                class="font-label-mono text-label-mono text-secondary tracking-widest mt-1 md:mt-0 shrink-0">2018/07
+                                — 2019/08</span>
+                        </div>
+                        <p class="font-label-mono text-label-mono text-on-surface-variant mb-4">Singularity 奇點數位科技有限公司
+                        </p>
+                        <p class="font-body-md text-body-md text-on-surface-variant mb-4">以 Egret 與 Cocos Creator 引擎搭配
+                            TypeScript 進行遊戲前後端程式開發，後端以 PHP 為主，搭配 MySQL、Redis 進行資料存取，並負責 Linux 伺服器日常維運</p>
+                        <ul class="list-none space-y-3 font-body-md text-body-md text-on-surface-variant">
+                            <li class="flex gap-3"><span class="text-secondary shrink-0">-</span>與 PM、2D
+                                美術及特效美術協作，獨立製作多款遊戲內的遊戲系統與功能</li>
+                            <li class="flex gap-3"><span class="text-secondary shrink-0">-</span>開發 Slot
+                                遊戲模組加快遊戲開發流程，並協助其他團隊成員使用該模組開發 Slot 遊戲</li>
+                            <li class="flex gap-3"><span class="text-secondary shrink-0">-</span>改進遊戲 AI 行為</li>
+                            <li class="flex gap-3"><span class="text-secondary shrink-0">-</span>開發 Python 自動化腳本，加快美術
+                                Photoshop 到遊戲引擎的工作流流程</li>
+                        </ul>
+                        <div class="flex flex-wrap gap-2 mt-5">
+                            <span class="font-label-mono text-label-sm text-outline">TYPESCRIPT</span>
+                            <span class="font-label-mono text-label-sm text-outline">EGRET</span>
+                            <span class="font-label-mono text-label-sm text-outline">COCOS CREATOR</span>
+                            <span class="font-label-mono text-label-sm text-outline">PHP</span>
+                            <span class="font-label-mono text-label-sm text-outline">MYSQL</span>
+                            <span class="font-label-mono text-label-sm text-outline">REDIS</span>
+                            <span class="font-label-mono text-label-sm text-outline">PYTHON</span>
+                            <span class="font-label-mono text-label-sm text-outline">SVN</span>
+                        </div>
                     </div>
                 </div>
-                <!-- Projects Grid -->
-                <div class="border-line p-8 md:p-12 flex flex-col gap-8 glow-hover bg-surface/50 backdrop-blur-sm">
+
+                <!-- Projects -->
+                <div class="border-line p-8 md:p-10 flex flex-col gap-8 glow-hover bg-surface/50 backdrop-blur-sm">
                     <h3
                         class="font-label-mono text-label-mono text-primary tracking-widest border-b border-white/10 pb-4">
                         // DEPLOYED ARTIFACTS</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Project 1 -->
+                        <!-- TalkRealm -->
                         <div
                             class="border-line p-6 flex flex-col h-full hover:bg-white/5 transition-colors duration-0 cursor-pointer">
                             <div class="flex justify-between items-start mb-4">
@@ -775,180 +504,39 @@
                                 </a>
                             </div>
                             <p class="font-body-md text-body-md text-on-surface-variant flex-grow mb-6">
-                                A decentralized, encrypted communication protocol designed for terminal environments.
-                                Built with Rust and WebSockets.
+                                基於 Web 的多人即時對話軟體，前端使用 Vue 後端使用 Golang 實現，目前實現了基礎的聊天與語音直播通訊功能。
                             </p>
-                            <div class="flex gap-2 mt-auto">
-                                <span class="font-label-mono text-label-sm text-outline">RUST</span>
-                                <span class="font-label-mono text-label-sm text-outline">WSS</span>
-                                <span class="font-label-mono text-label-sm text-outline">CRYPTOGRAPHY</span>
-                            </div>
-                        </div>
-                        <!-- Project 2 -->
-                        <div
-                            class="border-line p-6 flex flex-col h-full hover:bg-white/5 transition-colors duration-0 cursor-pointer">
-                            <div class="flex justify-between items-start mb-4">
-                                <h4 class="font-body-lg text-body-lg text-primary font-bold">GitHub Cake</h4>
-                                <a class="text-secondary hover:text-primary" href="#">
-                                    <span class="material-symbols-outlined">code</span>
-                                </a>
-                            </div>
-                            <p class="font-body-md text-body-md text-on-surface-variant flex-grow mb-6">
-                                An automated repository analysis engine that visualizes contribution topologies and tech
-                                debt metrics using D3.js.
-                            </p>
-                            <div class="flex gap-2 mt-auto">
-                                <span class="font-label-mono text-label-sm text-outline">TYPESCRIPT</span>
-                                <span class="font-label-mono text-label-sm text-outline">D3.JS</span>
-                                <span class="font-label-mono text-label-sm text-outline">GITHUB API</span>
+                            <div class="flex flex-wrap gap-2 mt-auto">
+                                <span class="font-label-mono text-label-sm text-outline">GOLANG</span>
+                                <span class="font-label-mono text-label-sm text-outline">VUE</span>
+                                <span class="font-label-mono text-label-sm text-outline">WEBSOCKET</span>
+                                <span class="font-label-mono text-label-sm text-outline">WEBRTC</span>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </section>
     </main>
-    <!-- Footer (Shared Component) -->
+    <!-- Footer -->
     <footer class="bg-surface-container-lowest w-full py-12 border-t border-white/10 mt-auto relative z-10">
         <div
             class="max-w-[1440px] mx-auto px-gutter flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
             <div class="font-label-mono text-label-sm tracking-widest text-outline">
-                ©2024 SYSTEM_CORE // ALL RIGHTS RESERVED
+                ©2026 ALGER HSU // ALL RIGHTS RESERVED
             </div>
             <div class="flex gap-6 font-label-mono text-label-sm tracking-widest">
-                <a class="text-outline hover:text-primary hover:underline transition-none" href="#">GITHUB</a>
-                <a class="text-outline hover:text-primary hover:underline transition-none" href="#">LINKEDIN</a>
-                <a class="text-outline hover:text-primary hover:underline transition-none" href="#">SOURCE</a>
+                <a class="text-outline hover:text-primary hover:underline transition-none"
+                    href="https://github.com/walnut-almonds" target="_blank">GITHUB</a>
+                <a class="text-outline hover:text-primary hover:underline transition-none"
+                    href="https://www.linkedin.com/in/kai-jie-hsu-b895a5265" target="_blank">LINKEDIN</a>
+                <a class="text-outline hover:text-primary hover:underline transition-none"
+                    href="https://www.cake.me/ewew61212" target="_blank">CAKE</a>
             </div>
         </div>
     </footer>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const canvas = document.getElementById('three-canvas');
-            if (!canvas) return;
-
-            const scene = new THREE.Scene();
-            scene.fog = new THREE.FogExp2('#131313', 0.015);
-
-            const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.z = 25;
-
-            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-            const nodesCount = 150;
-            const connectionsCount = 450;
-            const radius = 10;
-
-            const nodesGeometry = new THREE.BufferGeometry();
-            const nodesPositions = new Float32Array(nodesCount * 3);
-            const nodesColors = new Float32Array(nodesCount * 3);
-
-            const nodeData = [];
-            const colors = [new THREE.Color('#00f3ff'), new THREE.Color('#ff00ff')];
-
-            for (let i = 0; i < nodesCount; i++) {
-                const i3 = i * 3;
-                const phi = Math.acos(-1 + (2 * i) / nodesCount);
-                const theta = Math.sqrt(nodesCount * Math.PI) * phi;
-
-                const r = radius + (Math.random() - 0.5) * 4;
-
-                const x = r * Math.cos(theta) * Math.sin(phi);
-                const y = r * Math.sin(theta) * Math.sin(phi);
-                const z = r * Math.cos(phi);
-
-                nodesPositions[i3] = x;
-                nodesPositions[i3 + 1] = y;
-                nodesPositions[i3 + 2] = z;
-
-                const color = colors[Math.floor(Math.random() * colors.length)];
-                nodesColors[i3] = color.r;
-                nodesColors[i3 + 1] = color.g;
-                nodesColors[i3 + 2] = color.b;
-
-                nodeData.push({ pos: new THREE.Vector3(x, y, z), color: color });
-            }
-
-            nodesGeometry.setAttribute('position', new THREE.BufferAttribute(nodesPositions, 3));
-            nodesGeometry.setAttribute('color', new THREE.BufferAttribute(nodesColors, 3));
-            const nodesMaterial = new THREE.PointsMaterial({ size: 0.18, vertexColors: true, transparent: true, opacity: 0.9 });
-            const nodesMesh = new THREE.Points(nodesGeometry, nodesMaterial);
-            scene.add(nodesMesh);
-
-            const lineMaterial = new THREE.LineBasicMaterial({ color: '#333333', transparent: true, opacity: 0.3 });
-            const lineGroup = new THREE.Group();
-
-            const pulses = [];
-
-            for (let i = 0; i < connectionsCount; i++) {
-                const idxA = Math.floor(Math.random() * nodesCount);
-                const idxB = Math.floor(Math.random() * nodesCount);
-                const nodeA = nodeData[idxA];
-                const nodeB = nodeData[idxB];
-
-                if (nodeA.pos.distanceTo(nodeB.pos) < 12) {
-                    const lineGeometry = new THREE.BufferGeometry().setFromPoints([nodeA.pos, nodeB.pos]);
-                    const line = new THREE.Line(lineGeometry, lineMaterial);
-                    lineGroup.add(line);
-
-                    if (Math.random() > 0.85) {
-                        pulses.push({
-                            start: nodeA.pos,
-                            end: nodeB.pos,
-                            color: nodeA.color,
-                            progress: Math.random(),
-                            speed: 0.005 + Math.random() * 0.01
-                        });
-                    }
-                }
-            }
-            scene.add(lineGroup);
-
-            const pulsePointGeo = new THREE.SphereGeometry(0.1, 8, 8);
-            const pulseMeshes = pulses.map((p) => {
-                const pulsePointMat = new THREE.MeshBasicMaterial({ color: p.color });
-                const m = new THREE.Mesh(pulsePointGeo, pulsePointMat);
-                scene.add(m);
-                return m;
-            });
-
-            const controls = new THREE.OrbitControls(camera, renderer.domElement);
-            controls.enableDamping = true;
-            controls.dampingFactor = 0.03;
-            controls.enableZoom = false;
-            controls.enablePan = false;
-            controls.autoRotate = true;
-            controls.autoRotateSpeed = 0.5;
-
-            function animate() {
-                requestAnimationFrame(animate);
-                const time = performance.now() * 0.001;
-
-                pulses.forEach((p, i) => {
-                    p.progress += p.speed;
-                    if (p.progress > 1) p.progress = 0;
-                    pulseMeshes[i].position.lerpVectors(p.start, p.end, p.progress);
-                    pulseMeshes[i].scale.setScalar(0.5 + Math.sin(time * 8 + i) * 0.5);
-                });
-
-                nodesMesh.rotation.y = time * 0.05;
-                lineGroup.rotation.y = time * 0.05;
-
-                controls.update();
-                renderer.render(scene, camera);
-            }
-
-            animate();
-
-            window.addEventListener('resize', () => {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
-            });
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 
 </html>
