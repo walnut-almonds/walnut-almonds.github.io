@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>SYSTEM_CORE // RESUME</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries">
+        document.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.getElementById('three-canvas');
+            if (!canvas) return;
+
+            const scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2('#131313', 0.015);
+
+            const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 25;
+
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            const nodesCount = 150;
+            const connectionsCount = 450;
+            const radius = 10;
+
+            const nodesGeometry = new THREE.BufferGeometry();
+            const nodesPositions = new Float32Array(nodesCount * 3);
+            const nodesColors = new Float32Array(nodesCount * 3);
+
+            const nodeData = [];
+            const colors = [new THREE.Color('#00f3ff'), new THREE.Color('#ff00ff')];
+
+            for (let i = 0; i < nodesCount; i++) {
+                const i3 = i * 3;
+                const phi = Math.acos(-1 + (2 * i) / nodesCount);
+                const theta = Math.sqrt(nodesCount * Math.PI) * phi;
+
+                const r = radius + (Math.random() - 0.5) * 4;
+
+                const x = r * Math.cos(theta) * Math.sin(phi);
+                const y = r * Math.sin(theta) * Math.sin(phi);
+                const z = r * Math.cos(phi);
+
+                nodesPositions[i3] = x;
+                nodesPositions[i3 + 1] = y;
+                nodesPositions[i3 + 2] = z;
+
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                nodesColors[i3] = color.r;
+                nodesColors[i3 + 1] = color.g;
+                nodesColors[i3 + 2] = color.b;
+
+                nodeData.push({ pos: new THREE.Vector3(x, y, z), color: color });
+            }
+
+            nodesGeometry.setAttribute('position', new THREE.BufferAttribute(nodesPositions, 3));
+            nodesGeometry.setAttribute('color', new THREE.BufferAttribute(nodesColors, 3));
+            const nodesMaterial = new THREE.PointsMaterial({ size: 0.18, vertexColors: true, transparent: true, opacity: 0.9 });
+            const nodesMesh = new THREE.Points(nodesGeometry, nodesMaterial);
+            scene.add(nodesMesh);
+
+            const lineMaterial = new THREE.LineBasicMaterial({ color: '#333333', transparent: true, opacity: 0.3 });
+            const lineGroup = new THREE.Group();
+
+            const pulses = [];
+
+            for (let i = 0; i < connectionsCount; i++) {
+                const idxA = Math.floor(Math.random() * nodesCount);
+                const idxB = Math.floor(Math.random() * nodesCount);
+                const nodeA = nodeData[idxA];
+                const nodeB = nodeData[idxB];
+
+                if (nodeA.pos.distanceTo(nodeB.pos) < 12) {
+                    const lineGeometry = new THREE.BufferGeometry().setFromPoints([nodeA.pos, nodeB.pos]);
+                    const line = new THREE.Line(lineGeometry, lineMaterial);
+                    lineGroup.add(line);
+
+                    if (Math.random() > 0.85) {
+                        pulses.push({
+                            start: nodeA.pos,
+                            end: nodeB.pos,
+                            color: nodeA.color,
+                            progress: Math.random(),
+                            speed: 0.005 + Math.random() * 0.01
+                        });
+                    }
+                }
+            }
+            scene.add(lineGroup);
+
+            const pulsePointGeo = new THREE.SphereGeometry(0.1, 8, 8);
+            const pulseMeshes = pulses.map((p) => {
+                const pulsePointMat = new THREE.MeshBasicMaterial({ color: p.color });
+                const m = new THREE.Mesh(pulsePointGeo, pulsePointMat);
+                scene.add(m);
+                return m;
+            });
+
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.03;
+            controls.enableZoom = false;
+            controls.enablePan = false;
+            controls.autoRotate = true;
+            controls.autoRotateSpeed = 0.5;
+
+            function animate() {
+                requestAnimationFrame(animate);
+                const time = performance.now() * 0.001;
+
+                pulses.forEach((p, i) => {
+                    p.progress += p.speed;
+                    if (p.progress > 1) p.progress = 0;
+                    pulseMeshes[i].position.lerpVectors(p.start, p.end, p.progress);
+                    pulseMeshes[i].scale.setScalar(0.5 + Math.sin(time * 8 + i) * 0.5);
+                });
+
+                nodesMesh.rotation.y = time * 0.05;
+                lineGroup.rotation.y = time * 0.05;
+
+                controls.update();
+                renderer.render(scene, camera);
+            }
+
+            animate();
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        });
+    </script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;800;900&amp;family=Geist:wght@400;500&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Three.js and OrbitControls -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js">
+        document.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.getElementById('three-canvas');
+            if (!canvas) return;
+
+            const scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2('#131313', 0.015);
+
+            const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 25;
+
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            const nodesCount = 150;
+            const connectionsCount = 450;
+            const radius = 10;
+
+            const nodesGeometry = new THREE.BufferGeometry();
+            const nodesPositions = new Float32Array(nodesCount * 3);
+            const nodesColors = new Float32Array(nodesCount * 3);
+
+            const nodeData = [];
+            const colors = [new THREE.Color('#00f3ff'), new THREE.Color('#ff00ff')];
+
+            for (let i = 0; i < nodesCount; i++) {
+                const i3 = i * 3;
+                const phi = Math.acos(-1 + (2 * i) / nodesCount);
+                const theta = Math.sqrt(nodesCount * Math.PI) * phi;
+
+                const r = radius + (Math.random() - 0.5) * 4;
+
+                const x = r * Math.cos(theta) * Math.sin(phi);
+                const y = r * Math.sin(theta) * Math.sin(phi);
+                const z = r * Math.cos(phi);
+
+                nodesPositions[i3] = x;
+                nodesPositions[i3 + 1] = y;
+                nodesPositions[i3 + 2] = z;
+
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                nodesColors[i3] = color.r;
+                nodesColors[i3 + 1] = color.g;
+                nodesColors[i3 + 2] = color.b;
+
+                nodeData.push({ pos: new THREE.Vector3(x, y, z), color: color });
+            }
+
+            nodesGeometry.setAttribute('position', new THREE.BufferAttribute(nodesPositions, 3));
+            nodesGeometry.setAttribute('color', new THREE.BufferAttribute(nodesColors, 3));
+            const nodesMaterial = new THREE.PointsMaterial({ size: 0.18, vertexColors: true, transparent: true, opacity: 0.9 });
+            const nodesMesh = new THREE.Points(nodesGeometry, nodesMaterial);
+            scene.add(nodesMesh);
+
+            const lineMaterial = new THREE.LineBasicMaterial({ color: '#333333', transparent: true, opacity: 0.3 });
+            const lineGroup = new THREE.Group();
+
+            const pulses = [];
+
+            for (let i = 0; i < connectionsCount; i++) {
+                const idxA = Math.floor(Math.random() * nodesCount);
+                const idxB = Math.floor(Math.random() * nodesCount);
+                const nodeA = nodeData[idxA];
+                const nodeB = nodeData[idxB];
+
+                if (nodeA.pos.distanceTo(nodeB.pos) < 12) {
+                    const lineGeometry = new THREE.BufferGeometry().setFromPoints([nodeA.pos, nodeB.pos]);
+                    const line = new THREE.Line(lineGeometry, lineMaterial);
+                    lineGroup.add(line);
+
+                    if (Math.random() > 0.85) {
+                        pulses.push({
+                            start: nodeA.pos,
+                            end: nodeB.pos,
+                            color: nodeA.color,
+                            progress: Math.random(),
+                            speed: 0.005 + Math.random() * 0.01
+                        });
+                    }
+                }
+            }
+            scene.add(lineGroup);
+
+            const pulsePointGeo = new THREE.SphereGeometry(0.1, 8, 8);
+            const pulseMeshes = pulses.map((p) => {
+                const pulsePointMat = new THREE.MeshBasicMaterial({ color: p.color });
+                const m = new THREE.Mesh(pulsePointGeo, pulsePointMat);
+                scene.add(m);
+                return m;
+            });
+
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.03;
+            controls.enableZoom = false;
+            controls.enablePan = false;
+            controls.autoRotate = true;
+            controls.autoRotateSpeed = 0.5;
+
+            function animate() {
+                requestAnimationFrame(animate);
+                const time = performance.now() * 0.001;
+
+                pulses.forEach((p, i) => {
+                    p.progress += p.speed;
+                    if (p.progress > 1) p.progress = 0;
+                    pulseMeshes[i].position.lerpVectors(p.start, p.end, p.progress);
+                    pulseMeshes[i].scale.setScalar(0.5 + Math.sin(time * 8 + i) * 0.5);
+                });
+
+                nodesMesh.rotation.y = time * 0.05;
+                lineGroup.rotation.y = time * 0.05;
+
+                controls.update();
+                renderer.render(scene, camera);
+            }
+
+            animate();
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js">
+        document.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.getElementById('three-canvas');
+            if (!canvas) return;
+
+            const scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2('#131313', 0.015);
+
+            const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 25;
+
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            const nodesCount = 150;
+            const connectionsCount = 450;
+            const radius = 10;
+
+            const nodesGeometry = new THREE.BufferGeometry();
+            const nodesPositions = new Float32Array(nodesCount * 3);
+            const nodesColors = new Float32Array(nodesCount * 3);
+
+            const nodeData = [];
+            const colors = [new THREE.Color('#00f3ff'), new THREE.Color('#ff00ff')];
+
+            for (let i = 0; i < nodesCount; i++) {
+                const i3 = i * 3;
+                const phi = Math.acos(-1 + (2 * i) / nodesCount);
+                const theta = Math.sqrt(nodesCount * Math.PI) * phi;
+
+                const r = radius + (Math.random() - 0.5) * 4;
+
+                const x = r * Math.cos(theta) * Math.sin(phi);
+                const y = r * Math.sin(theta) * Math.sin(phi);
+                const z = r * Math.cos(phi);
+
+                nodesPositions[i3] = x;
+                nodesPositions[i3 + 1] = y;
+                nodesPositions[i3 + 2] = z;
+
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                nodesColors[i3] = color.r;
+                nodesColors[i3 + 1] = color.g;
+                nodesColors[i3 + 2] = color.b;
+
+                nodeData.push({ pos: new THREE.Vector3(x, y, z), color: color });
+            }
+
+            nodesGeometry.setAttribute('position', new THREE.BufferAttribute(nodesPositions, 3));
+            nodesGeometry.setAttribute('color', new THREE.BufferAttribute(nodesColors, 3));
+            const nodesMaterial = new THREE.PointsMaterial({ size: 0.18, vertexColors: true, transparent: true, opacity: 0.9 });
+            const nodesMesh = new THREE.Points(nodesGeometry, nodesMaterial);
+            scene.add(nodesMesh);
+
+            const lineMaterial = new THREE.LineBasicMaterial({ color: '#333333', transparent: true, opacity: 0.3 });
+            const lineGroup = new THREE.Group();
+
+            const pulses = [];
+
+            for (let i = 0; i < connectionsCount; i++) {
+                const idxA = Math.floor(Math.random() * nodesCount);
+                const idxB = Math.floor(Math.random() * nodesCount);
+                const nodeA = nodeData[idxA];
+                const nodeB = nodeData[idxB];
+
+                if (nodeA.pos.distanceTo(nodeB.pos) < 12) {
+                    const lineGeometry = new THREE.BufferGeometry().setFromPoints([nodeA.pos, nodeB.pos]);
+                    const line = new THREE.Line(lineGeometry, lineMaterial);
+                    lineGroup.add(line);
+
+                    if (Math.random() > 0.85) {
+                        pulses.push({
+                            start: nodeA.pos,
+                            end: nodeB.pos,
+                            color: nodeA.color,
+                            progress: Math.random(),
+                            speed: 0.005 + Math.random() * 0.01
+                        });
+                    }
+                }
+            }
+            scene.add(lineGroup);
+
+            const pulsePointGeo = new THREE.SphereGeometry(0.1, 8, 8);
+            const pulseMeshes = pulses.map((p) => {
+                const pulsePointMat = new THREE.MeshBasicMaterial({ color: p.color });
+                const m = new THREE.Mesh(pulsePointGeo, pulsePointMat);
+                scene.add(m);
+                return m;
+            });
+
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.03;
+            controls.enableZoom = false;
+            controls.enablePan = false;
+            controls.autoRotate = true;
+            controls.autoRotateSpeed = 0.5;
+
+            function animate() {
+                requestAnimationFrame(animate);
+                const time = performance.now() * 0.001;
+
+                pulses.forEach((p, i) => {
+                    p.progress += p.speed;
+                    if (p.progress > 1) p.progress = 0;
+                    pulseMeshes[i].position.lerpVectors(p.start, p.end, p.progress);
+                    pulseMeshes[i].scale.setScalar(0.5 + Math.sin(time * 8 + i) * 0.5);
+                });
+
+                nodesMesh.rotation.y = time * 0.05;
+                lineGroup.rotation.y = time * 0.05;
+
+                controls.update();
+                renderer.render(scene, camera);
+            }
+
+            animate();
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        });
+    </script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#e2e2e2",
+                        "on-surface": "#e2e2e2",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "on-background": "#e2e2e2",
+                        "outline-variant": "#444748",
+                        "surface-container-lowest": "#0e0e0e",
+                        "surface-tint": "#c6c6c7",
+                        "on-primary-fixed-variant": "#454747",
+                        "tertiary-fixed": "#e2e2e2",
+                        "secondary-fixed-dim": "#b3c6f3",
+                        "on-primary-fixed": "#1a1c1c",
+                        "primary-fixed": "#e2e2e2",
+                        "on-error": "#690005",
+                        "background": "#131313",
+                        "surface-dim": "#131313",
+                        "on-primary": "#2f3131",
+                        "on-primary-container": "#636565",
+                        "surface-variant": "#353535",
+                        "on-tertiary": "#2f3131",
+                        "inverse-on-surface": "#303030",
+                        "on-tertiary-container": "#636565",
+                        "secondary": "#b3c6f3",
+                        "inverse-primary": "#5d5f5f",
+                        "surface-bright": "#393939",
+                        "secondary-fixed": "#d8e2ff",
+                        "on-secondary-fixed-variant": "#33466c",
+                        "surface-container-highest": "#353535",
+                        "secondary-container": "#33466c",
+                        "surface-container-high": "#2a2a2a",
+                        "on-secondary-fixed": "#031a3e",
+                        "on-error-container": "#ffdad6",
+                        "error-container": "#93000a",
+                        "on-surface-variant": "#c4c7c8",
+                        "on-secondary-container": "#a2b5e1",
+                        "primary-container": "#e2e2e2",
+                        "primary": "#ffffff",
+                        "surface": "#131313",
+                        "tertiary-fixed-dim": "#c6c6c7",
+                        "primary-fixed-dim": "#c6c6c7",
+                        "surface-container": "#1f1f1f",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "tertiary-container": "#e2e2e2",
+                        "on-secondary": "#1c3054",
+                        "tertiary": "#ffffff",
+                        "surface-container-low": "#1b1b1b",
+                        "error": "#ffb4ab",
+                        "outline": "#8e9192"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "grid-columns": "12",
+                        "unit": "4px",
+                        "margin-mobile": "20px",
+                        "margin-desktop": "64px"
+                    },
+                    "fontFamily": {
+                        "display-lg-mobile": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"],
+                        "body-md": ["Hanken Grotesk"],
+                        "body-lg": ["Hanken Grotesk"],
+                        "label-sm": ["Geist"],
+                        "headline-md": ["Hanken Grotesk"],
+                        "label-mono": ["Geist"]
+                    },
+                    "fontSize": {
+                        "display-lg-mobile": ["48px", { "lineHeight": "52px", "letterSpacing": "-0.03em", "fontWeight": "600" }],
+                        "display-lg": ["72px", { "lineHeight": "80px", "letterSpacing": "-0.04em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "letterSpacing": "0em", "fontWeight": "400" }],
+                        "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.1em", "fontWeight": "500" }],
+                        "headline-md": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "500" }],
+                        "label-mono": ["13px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #131313;
+            color: #e2e2e2;
+            background-image:
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 64px 64px;
+            background-position: center top;
+        }
+
+        .glass-panel {
+            background: rgba(19, 19, 19, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .border-line {
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .glow-hover:hover {
+            box-shadow: inset 0 0 20px rgba(179, 198, 243, 0.1);
+            border-color: rgba(179, 198, 243, 0.5);
+        }
+
+        /* Minimalist Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #131313;
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #444748;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8e9192;
+        }
+
+        #particle-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        #three-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            cursor: grab;
+        }
+
+        #three-canvas:active {
+            cursor: grabbing;
+        }
+
+        /* Ensure overlay allows pointer events through to canvas */
+        .pointer-events-none-except-buttons {
+            pointer-events: none;
+        }
+
+        .pointer-events-none-except-buttons a,
+        .pointer-events-none-except-buttons button {
+            pointer-events: auto;
+        }
+    </style>
+</head>
+
+<body class="font-body-md text-body-md antialiased min-h-screen flex flex-col">
+    <!-- TopNavBar (Shared Component) -->
+    <header class="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b border-white/15">
+        <div class="flex justify-between items-center px-gutter h-16 w-full max-w-[1440px] mx-auto">
+            <div class="font-display-lg-mobile text-body-lg font-black text-primary tracking-tighter">
+                KINETIC_ARCHIVE
+            </div>
+            <nav class="hidden md:flex items-center gap-8 font-label-mono text-label-mono uppercase tracking-widest">
+                <a class="text-on-surface-variant hover:bg-primary hover:text-background transition-none px-2 py-1"
+                    href="https://github.com/walnut-almonds" target="_blank">PROJECTS</a>
+                <a class="text-on-surface-variant hover:bg-primary hover:text-background transition-none px-2 py-1"
+                    href="https://chat.qrumi.org/" target="_blank">TALKREALM</a>
+                <a class="text-primary border-b border-primary pb-1 px-2 py-1 hover:bg-primary hover:text-background transition-none"
+                    href="#">RESUME</a>
+                <!-- <a class="text-on-surface-variant hover:bg-primary hover:text-background transition-none px-2 py-1"
+                    href="#">CONTACT</a> -->
+            </nav>
+            <button
+                class="hidden md:block font-label-mono text-label-mono uppercase tracking-widest border-line px-4 py-2 hover:bg-primary hover:text-background transition-none">
+                HIRE_ME
+            </button>
+            <button class="md:hidden text-primary">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+        </div>
+    </header>
+    <main class="flex-grow flex flex-col w-full">
+        <!-- Full Screen Interactive Hero Section -->
+        <section class="relative min-h-screen flex flex-col justify-center items-center overflow-hidden bg-background">
+            <!-- 3D Canvas Background -->
+            <canvas id="three-canvas"></canvas>
+            <!-- Interactive Particle Background -->
+            <div class="relative z-10 max-w-4xl text-center px-6 pt-16 pointer-events-none-except-buttons">
+                <h1
+                    class="font-display-lg text-display-lg text-primary mb-6 tracking-tighter drop-shadow-[0_0_20px_rgba(255,255,255,0.5)]">
+                    ENGINEERING<br />
+                    <span class="text-secondary drop-shadow-[0_0_15px_rgba(0,243,255,0.6)]">SYSTEMS.</span>
+                </h1>
+                <p
+                    class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto mb-12 drop-shadow-md bg-background/30 p-4 rounded-xl backdrop-blur-sm">
+                    I build high-performance, minimalist software architectures. Specializing in highly interactive
+                    front-ends and scalable backend topologies. Bridging rigid structure with organic interaction.
+                </p>
+                <div class="flex justify-center gap-4">
+                    <a class="font-label-mono text-label-mono uppercase tracking-widest border-line px-8 py-4 hover:bg-primary hover:text-background transition-all duration-300 flex items-center gap-2 group bg-background/50 backdrop-blur-sm pointer-events-auto"
+                        href="#resume">
+                        <span
+                            class="material-symbols-outlined text-[20px] group-hover:translate-y-1 transition-transform">arrow_downward</span>
+                        EXPLORE DATA
+                    </a>
+                </div>
+            </div>
+        </section>
+        <!-- Resume Section (Bento Grid Layout) -->
+        <section
+            class="pt-24 pb-32 max-w-[1440px] mx-auto w-full px-margin-mobile md:px-margin-desktop grid grid-cols-1 lg:grid-cols-12 gap-8"
+            id="resume">
+            <!-- Sidebar (Skills & Ed) -->
+            <div class="lg:col-span-4 flex flex-col gap-8">
+                <!-- Identity Card -->
+                <div class="border-line p-8 flex flex-col gap-6 glow-hover bg-surface/50 backdrop-blur-sm">
+                    <div>
+                        <h2 class="font-headline-md text-headline-md text-primary">SYSTEM_CORE</h2>
+                        <p class="font-label-mono text-label-mono text-secondary tracking-widest mt-2">// SENIOR
+                            ENGINEER</p>
+                    </div>
+                    <div class="border-t border-white/10 pt-6">
+                        <ul class="space-y-4 font-label-mono text-label-mono text-on-surface-variant">
+                            <li class="flex items-center gap-3">
+                                <span class="material-symbols-outlined text-secondary">location_on</span>
+                                LOCATION: SAN FRANCISCO, CA
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <span class="material-symbols-outlined text-secondary">mail</span>
+                                PING: INIT@SYSTEM.CORE
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <span class="material-symbols-outlined text-secondary">terminal</span>
+                                STATUS: AWAITING INPUT
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Skills Area -->
+                <div class="border-line p-8 flex flex-col gap-6 glow-hover bg-surface/50 backdrop-blur-sm">
+                    <h3
+                        class="font-label-mono text-label-mono text-primary tracking-widest border-b border-white/10 pb-4">
+                        // TECHNICAL PARAMS</h3>
+                    <div class="space-y-6">
+                        <div>
+                            <h4 class="font-body-md text-body-md text-secondary mb-3">LANGUAGES</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span
+                                    class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">TYPESCRIPT</span>
+                                <span
+                                    class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">RUST</span>
+                                <span
+                                    class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">PYTHON</span>
+                                <span
+                                    class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">GO</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-body-md text-body-md text-secondary mb-3">FRAMEWORKS &amp; ARCHITECTURE</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">REACT
+                                    / NEXT.JS</span>
+                                <span
+                                    class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">NODE.JS</span>
+                                <span
+                                    class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">KUBERNETES</span>
+                                <span class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">AWS /
+                                    GCP</span>
+                                <span
+                                    class="border-line px-3 py-1 font-label-mono text-label-sm text-on-surface">POSTGRESQL</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Education -->
+                <div class="border-line p-8 flex flex-col gap-6 glow-hover bg-surface/50 backdrop-blur-sm">
+                    <h3
+                        class="font-label-mono text-label-mono text-primary tracking-widest border-b border-white/10 pb-4">
+                        // CORE TRAINING</h3>
+                    <div>
+                        <h4 class="font-body-lg text-body-lg text-primary">B.S. COMPUTER SCIENCE</h4>
+                        <p class="font-label-mono text-label-mono text-secondary tracking-widest mt-1">UNIVERSITY OF
+                            TECHNOLOGY // 2018</p>
+                        <p class="font-body-md text-body-md text-on-surface-variant mt-3">
+                            Focus on Distributed Systems and Machine Learning architectures.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- Main Column (Experience & Projects) -->
+            <div class="lg:col-span-8 flex flex-col gap-8">
+                <!-- Experience Block -->
+                <div class="border-line p-8 md:p-12 flex flex-col gap-10 glow-hover bg-surface/50 backdrop-blur-sm">
+                    <h3
+                        class="font-label-mono text-label-mono text-primary tracking-widest border-b border-white/10 pb-4">
+                        // OPERATIONAL HISTORY</h3>
+                    <!-- Job 1 -->
+                    <div class="relative pl-6 border-l border-white/15">
+                        <div class="absolute w-3 h-3 bg-secondary rounded-full -left-[6.5px] top-2"></div>
+                        <div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-4">
+                            <h4 class="font-headline-md text-headline-md text-primary">LEAD ARCHITECT</h4>
+                            <span
+                                class="font-label-mono text-label-mono text-secondary tracking-widest mt-2 md:mt-0">2021
+                                - PRESENT // NEXUS CORP</span>
+                        </div>
+                        <ul class="list-none space-y-3 font-body-md text-body-md text-on-surface-variant">
+                            <li class="flex gap-3">
+                                <span class="text-secondary">-</span>
+                                Architected and deployed a microservices ecosystem scaling to 5M+ daily active users,
+                                reducing latency by 40%.
+                            </li>
+                            <li class="flex gap-3">
+                                <span class="text-secondary">-</span>
+                                Directed a team of 12 engineers in migrating legacy monoliths to containerized
+                                Kubernetes clusters.
+                            </li>
+                            <li class="flex gap-3">
+                                <span class="text-secondary">-</span>
+                                Implemented stringent zero-trust security protocols across all internal networking
+                                layers.
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- Job 2 -->
+                    <div class="relative pl-6 border-l border-white/15">
+                        <div
+                            class="absolute w-3 h-3 bg-surface-variant rounded-full border border-white/30 -left-[6.5px] top-2">
+                        </div>
+                        <div class="flex flex-col md:flex-row md:justify-between md:items-baseline mb-4">
+                            <h4 class="font-headline-md text-headline-md text-primary">FULL STACK ENGINEER</h4>
+                            <span
+                                class="font-label-mono text-label-mono text-secondary tracking-widest mt-2 md:mt-0">2018
+                                - 2021 // AETHER DYNAMICS</span>
+                        </div>
+                        <ul class="list-none space-y-3 font-body-md text-body-md text-on-surface-variant">
+                            <li class="flex gap-3">
+                                <span class="text-secondary">-</span>
+                                Built high-performance, reactive user interfaces utilizing React and WebGL for data
+                                visualization.
+                            </li>
+                            <li class="flex gap-3">
+                                <span class="text-secondary">-</span>
+                                Designed and maintained GraphQL APIs interfacing with distributed Postgres databases.
+                            </li>
+                            <li class="flex gap-3">
+                                <span class="text-secondary">-</span>
+                                Optimized CI/CD pipelines, cutting deployment times from 45 minutes to under 5 minutes.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Projects Grid -->
+                <div class="border-line p-8 md:p-12 flex flex-col gap-8 glow-hover bg-surface/50 backdrop-blur-sm">
+                    <h3
+                        class="font-label-mono text-label-mono text-primary tracking-widest border-b border-white/10 pb-4">
+                        // DEPLOYED ARTIFACTS</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Project 1 -->
+                        <div
+                            class="border-line p-6 flex flex-col h-full hover:bg-white/5 transition-colors duration-0 cursor-pointer">
+                            <div class="flex justify-between items-start mb-4">
+                                <h4 class="font-body-lg text-body-lg text-primary font-bold">TalkRealm</h4>
+                                <a class="text-secondary hover:text-primary" href="https://chat.qrumi.org/"
+                                    target="_blank">
+                                    <span class="material-symbols-outlined">open_in_new</span>
+                                </a>
+                            </div>
+                            <p class="font-body-md text-body-md text-on-surface-variant flex-grow mb-6">
+                                A decentralized, encrypted communication protocol designed for terminal environments.
+                                Built with Rust and WebSockets.
+                            </p>
+                            <div class="flex gap-2 mt-auto">
+                                <span class="font-label-mono text-label-sm text-outline">RUST</span>
+                                <span class="font-label-mono text-label-sm text-outline">WSS</span>
+                                <span class="font-label-mono text-label-sm text-outline">CRYPTOGRAPHY</span>
+                            </div>
+                        </div>
+                        <!-- Project 2 -->
+                        <div
+                            class="border-line p-6 flex flex-col h-full hover:bg-white/5 transition-colors duration-0 cursor-pointer">
+                            <div class="flex justify-between items-start mb-4">
+                                <h4 class="font-body-lg text-body-lg text-primary font-bold">GitHub Cake</h4>
+                                <a class="text-secondary hover:text-primary" href="#">
+                                    <span class="material-symbols-outlined">code</span>
+                                </a>
+                            </div>
+                            <p class="font-body-md text-body-md text-on-surface-variant flex-grow mb-6">
+                                An automated repository analysis engine that visualizes contribution topologies and tech
+                                debt metrics using D3.js.
+                            </p>
+                            <div class="flex gap-2 mt-auto">
+                                <span class="font-label-mono text-label-sm text-outline">TYPESCRIPT</span>
+                                <span class="font-label-mono text-label-sm text-outline">D3.JS</span>
+                                <span class="font-label-mono text-label-sm text-outline">GITHUB API</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- Footer (Shared Component) -->
+    <footer class="bg-surface-container-lowest w-full py-12 border-t border-white/10 mt-auto relative z-10">
+        <div
+            class="max-w-[1440px] mx-auto px-gutter flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
+            <div class="font-label-mono text-label-sm tracking-widest text-outline">
+                ©2024 SYSTEM_CORE // ALL RIGHTS RESERVED
+            </div>
+            <div class="flex gap-6 font-label-mono text-label-sm tracking-widest">
+                <a class="text-outline hover:text-primary hover:underline transition-none" href="#">GITHUB</a>
+                <a class="text-outline hover:text-primary hover:underline transition-none" href="#">LINKEDIN</a>
+                <a class="text-outline hover:text-primary hover:underline transition-none" href="#">SOURCE</a>
+            </div>
+        </div>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.getElementById('three-canvas');
+            if (!canvas) return;
+
+            const scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2('#131313', 0.015);
+
+            const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 25;
+
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            const nodesCount = 150;
+            const connectionsCount = 450;
+            const radius = 10;
+
+            const nodesGeometry = new THREE.BufferGeometry();
+            const nodesPositions = new Float32Array(nodesCount * 3);
+            const nodesColors = new Float32Array(nodesCount * 3);
+
+            const nodeData = [];
+            const colors = [new THREE.Color('#00f3ff'), new THREE.Color('#ff00ff')];
+
+            for (let i = 0; i < nodesCount; i++) {
+                const i3 = i * 3;
+                const phi = Math.acos(-1 + (2 * i) / nodesCount);
+                const theta = Math.sqrt(nodesCount * Math.PI) * phi;
+
+                const r = radius + (Math.random() - 0.5) * 4;
+
+                const x = r * Math.cos(theta) * Math.sin(phi);
+                const y = r * Math.sin(theta) * Math.sin(phi);
+                const z = r * Math.cos(phi);
+
+                nodesPositions[i3] = x;
+                nodesPositions[i3 + 1] = y;
+                nodesPositions[i3 + 2] = z;
+
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                nodesColors[i3] = color.r;
+                nodesColors[i3 + 1] = color.g;
+                nodesColors[i3 + 2] = color.b;
+
+                nodeData.push({ pos: new THREE.Vector3(x, y, z), color: color });
+            }
+
+            nodesGeometry.setAttribute('position', new THREE.BufferAttribute(nodesPositions, 3));
+            nodesGeometry.setAttribute('color', new THREE.BufferAttribute(nodesColors, 3));
+            const nodesMaterial = new THREE.PointsMaterial({ size: 0.18, vertexColors: true, transparent: true, opacity: 0.9 });
+            const nodesMesh = new THREE.Points(nodesGeometry, nodesMaterial);
+            scene.add(nodesMesh);
+
+            const lineMaterial = new THREE.LineBasicMaterial({ color: '#333333', transparent: true, opacity: 0.3 });
+            const lineGroup = new THREE.Group();
+
+            const pulses = [];
+
+            for (let i = 0; i < connectionsCount; i++) {
+                const idxA = Math.floor(Math.random() * nodesCount);
+                const idxB = Math.floor(Math.random() * nodesCount);
+                const nodeA = nodeData[idxA];
+                const nodeB = nodeData[idxB];
+
+                if (nodeA.pos.distanceTo(nodeB.pos) < 12) {
+                    const lineGeometry = new THREE.BufferGeometry().setFromPoints([nodeA.pos, nodeB.pos]);
+                    const line = new THREE.Line(lineGeometry, lineMaterial);
+                    lineGroup.add(line);
+
+                    if (Math.random() > 0.85) {
+                        pulses.push({
+                            start: nodeA.pos,
+                            end: nodeB.pos,
+                            color: nodeA.color,
+                            progress: Math.random(),
+                            speed: 0.005 + Math.random() * 0.01
+                        });
+                    }
+                }
+            }
+            scene.add(lineGroup);
+
+            const pulsePointGeo = new THREE.SphereGeometry(0.1, 8, 8);
+            const pulseMeshes = pulses.map((p) => {
+                const pulsePointMat = new THREE.MeshBasicMaterial({ color: p.color });
+                const m = new THREE.Mesh(pulsePointGeo, pulsePointMat);
+                scene.add(m);
+                return m;
+            });
+
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.03;
+            controls.enableZoom = false;
+            controls.enablePan = false;
+            controls.autoRotate = true;
+            controls.autoRotateSpeed = 0.5;
+
+            function animate() {
+                requestAnimationFrame(animate);
+                const time = performance.now() * 0.001;
+
+                pulses.forEach((p, i) => {
+                    p.progress += p.speed;
+                    if (p.progress > 1) p.progress = 0;
+                    pulseMeshes[i].position.lerpVectors(p.start, p.end, p.progress);
+                    pulseMeshes[i].scale.setScalar(0.5 + Math.sin(time * 8 + i) * 0.5);
+                });
+
+                nodesMesh.rotation.y = time * 0.05;
+                lineGroup.rotation.y = time * 0.05;
+
+                controls.update();
+                renderer.render(scene, camera);
+            }
+
+            animate();
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        });
+    </script>
+</body>
+
+</html>
