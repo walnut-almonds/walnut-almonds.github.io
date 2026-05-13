@@ -1,4 +1,28 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Mobile menu toggle
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const menuDrawer = document.getElementById('mobile-menu');
+    const menuIcon = document.getElementById('mobile-menu-icon');
+
+    if (menuBtn && menuDrawer) {
+        menuBtn.addEventListener('click', () => {
+            const isOpen = !menuDrawer.classList.contains('hidden');
+            menuDrawer.classList.toggle('hidden', isOpen);
+            menuIcon.textContent = isOpen ? 'menu' : 'close';
+            menuBtn.setAttribute('aria-expanded', String(!isOpen));
+        });
+
+        // Close menu when a nav link is clicked
+        menuDrawer.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                menuDrawer.classList.add('hidden');
+                menuIcon.textContent = 'menu';
+                menuBtn.setAttribute('aria-expanded', 'false');
+            });
+        });
+    }
+
+    // Three.js canvas
     const canvas = document.getElementById('three-canvas');
     if (!canvas) return;
 
