@@ -6,12 +6,14 @@
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Qrumi</title>
-    <meta name="description" content="許凱傑 (Alger Hsu) — Go / Backend Software Developer based in Taipei, Taiwan. Specializing in high-performance systems, CDN infrastructure, and scalable backend architectures." />
+    <meta name="description"
+        content="許凱傑 (Alger Hsu) — Go / Backend Software Developer based in Taipei, Taiwan. Specializing in high-performance systems, CDN infrastructure, and scalable backend architectures." />
     <meta name="author" content="Alger Hsu" />
     <link rel="canonical" href="https://qrumi.org/" />
     <!-- Open Graph -->
     <meta property="og:title" content="Qrumi" />
-    <meta property="og:description" content="Go / Backend Software Developer based in Taipei, Taiwan. Specializing in high-performance systems and scalable backend architectures." />
+    <meta property="og:description"
+        content="Go / Backend Software Developer based in Taipei, Taiwan. Specializing in high-performance systems and scalable backend architectures." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://qrumi.org/" />
     <!-- Twitter Card -->
@@ -19,7 +21,7 @@
     <meta name="twitter:title" content="Qrumi" />
     <meta name="twitter:description" content="Go / Backend Software Developer based in Taipei, Taiwan." />
     <link rel="icon" type="image/png" sizes="256x256" href="/favicon.png" />
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="stylesheet" href="tailwind.css" />
     <link
         href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;800;900&amp;family=Geist:wght@400;500&amp;display=swap"
         rel="stylesheet" />
@@ -29,95 +31,6 @@
     <!-- Three.js and OrbitControls -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-    <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "inverse-surface": "#e2e2e2",
-                        "on-surface": "#e2e2e2",
-                        "on-tertiary-fixed": "#1a1c1c",
-                        "on-background": "#e2e2e2",
-                        "outline-variant": "#444748",
-                        "surface-container-lowest": "#0e0e0e",
-                        "surface-tint": "#c6c6c7",
-                        "on-primary-fixed-variant": "#454747",
-                        "tertiary-fixed": "#e2e2e2",
-                        "secondary-fixed-dim": "#b3c6f3",
-                        "on-primary-fixed": "#1a1c1c",
-                        "primary-fixed": "#e2e2e2",
-                        "on-error": "#690005",
-                        "background": "#131313",
-                        "surface-dim": "#131313",
-                        "on-primary": "#2f3131",
-                        "on-primary-container": "#636565",
-                        "surface-variant": "#353535",
-                        "on-tertiary": "#2f3131",
-                        "inverse-on-surface": "#303030",
-                        "on-tertiary-container": "#636565",
-                        "secondary": "#b3c6f3",
-                        "inverse-primary": "#5d5f5f",
-                        "surface-bright": "#393939",
-                        "secondary-fixed": "#d8e2ff",
-                        "on-secondary-fixed-variant": "#33466c",
-                        "surface-container-highest": "#353535",
-                        "secondary-container": "#33466c",
-                        "surface-container-high": "#2a2a2a",
-                        "on-secondary-fixed": "#031a3e",
-                        "on-error-container": "#ffdad6",
-                        "error-container": "#93000a",
-                        "on-surface-variant": "#c4c7c8",
-                        "on-secondary-container": "#a2b5e1",
-                        "primary-container": "#e2e2e2",
-                        "primary": "#ffffff",
-                        "surface": "#131313",
-                        "tertiary-fixed-dim": "#c6c6c7",
-                        "primary-fixed-dim": "#c6c6c7",
-                        "surface-container": "#1f1f1f",
-                        "on-tertiary-fixed-variant": "#454747",
-                        "tertiary-container": "#e2e2e2",
-                        "on-secondary": "#1c3054",
-                        "tertiary": "#ffffff",
-                        "surface-container-low": "#1b1b1b",
-                        "error": "#ffb4ab",
-                        "outline": "#8e9192"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "full": "9999px"
-                    },
-                    "spacing": {
-                        "gutter": "24px",
-                        "grid-columns": "12",
-                        "unit": "4px",
-                        "margin-mobile": "20px",
-                        "margin-desktop": "64px"
-                    },
-                    "fontFamily": {
-                        "display-lg-mobile": ["Hanken Grotesk"],
-                        "display-lg": ["Hanken Grotesk"],
-                        "body-md": ["Hanken Grotesk"],
-                        "body-lg": ["Hanken Grotesk"],
-                        "label-sm": ["Geist"],
-                        "headline-md": ["Hanken Grotesk"],
-                        "label-mono": ["Geist"]
-                    },
-                    "fontSize": {
-                        "display-lg-mobile": ["48px", { "lineHeight": "52px", "letterSpacing": "-0.03em", "fontWeight": "600" }],
-                        "display-lg": ["72px", { "lineHeight": "80px", "letterSpacing": "-0.04em", "fontWeight": "600" }],
-                        "body-md": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400" }],
-                        "body-lg": ["18px", { "lineHeight": "28px", "letterSpacing": "0em", "fontWeight": "400" }],
-                        "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.1em", "fontWeight": "500" }],
-                        "headline-md": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "500" }],
-                        "label-mono": ["13px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "400" }]
-                    }
-                }
-            }
-        }
-    </script>
     <link rel="stylesheet" href="styles.css" />
 </head>
 
@@ -219,7 +132,8 @@
                             </li>
                             <li class="flex items-center gap-3">
                                 <span class="material-symbols-outlined text-secondary text-[18px]">call</span>
-                                <a href="tel:+886972995881" class="hover:text-primary transition-none">+886 972-995-881</a>
+                                <a href="tel:+886972995881" class="hover:text-primary transition-none">+886
+                                    972-995-881</a>
                             </li>
                         </ul>
                     </div>
@@ -229,7 +143,8 @@
                             class="border-line px-3 py-1.5 font-label-mono text-label-sm text-on-surface hover:bg-primary hover:text-background transition-none flex items-center gap-1.5">
                             <span class="material-symbols-outlined text-[14px]">code</span>GITHUB
                         </a>
-                        <a href="https://www.linkedin.com/in/kai-jie-hsu-b895a5265" target="_blank" rel="noopener noreferrer"
+                        <a href="https://www.linkedin.com/in/kai-jie-hsu-b895a5265" target="_blank"
+                            rel="noopener noreferrer"
                             class="border-line px-3 py-1.5 font-label-mono text-label-sm text-on-surface hover:bg-primary hover:text-background transition-none flex items-center gap-1.5">
                             <span class="material-symbols-outlined text-[14px]">link</span>LINKEDIN
                         </a>
@@ -548,7 +463,8 @@
         </section>
     </main>
     <!-- Footer -->
-    <footer id="contact" class="bg-surface-container-lowest w-full py-12 border-t border-white/10 mt-auto relative z-10">
+    <footer id="contact"
+        class="bg-surface-container-lowest w-full py-12 border-t border-white/10 mt-auto relative z-10">
         <div
             class="max-w-[1440px] mx-auto px-gutter flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
             <div class="font-label-mono text-label-sm tracking-widest text-outline">
@@ -558,7 +474,8 @@
                 <a class="text-outline hover:text-primary hover:underline transition-none"
                     href="https://github.com/walnut-almonds" target="_blank" rel="noopener noreferrer">GITHUB</a>
                 <a class="text-outline hover:text-primary hover:underline transition-none"
-                    href="https://www.linkedin.com/in/kai-jie-hsu-b895a5265" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
+                    href="https://www.linkedin.com/in/kai-jie-hsu-b895a5265" target="_blank"
+                    rel="noopener noreferrer">LINKEDIN</a>
                 <a class="text-outline hover:text-primary hover:underline transition-none"
                     href="https://www.cake.me/ewew61212" target="_blank" rel="noopener noreferrer">CAKE</a>
             </div>
