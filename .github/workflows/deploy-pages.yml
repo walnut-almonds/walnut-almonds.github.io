@@ -40,10 +40,8 @@ jobs:
             - name: Prepare deploy artifact
               run: |
                   mkdir -p dist
-                  # Copy only tracked files into dist (avoids including dev files or node_modules)
-                  git checkout-index -a -f --prefix=dist/
-                  # Copy the freshly-built Tailwind CSS (untracked build artifact)
-                  cp tailwind.css dist/tailwind.css
+                  cp index.html styles.css script.js tailwind.css dist/
+                  cp favicon.ico favicon.png screen.png CNAME dist/
 
             - name: Configure GitHub Pages
               uses: actions/configure-pages@v5

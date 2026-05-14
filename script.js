@@ -121,8 +121,10 @@ document.addEventListener('DOMContentLoaded', () => {
     controls.autoRotate = true;
     controls.autoRotateSpeed = 0.5;
 
+    let animationId;
+
     function animate() {
-        requestAnimationFrame(animate);
+        animationId = requestAnimationFrame(animate);
         const time = performance.now() * 0.001;
 
         pulses.forEach((p, i) => {
@@ -140,6 +142,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     animate();
+
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            cancelAnimationFrame(animationId);
+        } else {
+            animate();
+        }
+    });
 
     let resizeTimer;
     window.addEventListener('resize', () => {

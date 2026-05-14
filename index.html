@@ -16,12 +16,18 @@
         content="Go / Backend Software Developer based in Taipei, Taiwan. Specializing in high-performance systems and scalable backend architectures." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://qrumi.org/" />
+    <meta property="og:image" content="https://qrumi.org/screen.png" />
     <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Qrumi" />
     <meta name="twitter:description" content="Go / Backend Software Developer based in Taipei, Taiwan." />
+    <meta name="twitter:image" content="https://qrumi.org/screen.png" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" sizes="256x256" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
     <link rel="stylesheet" href="tailwind.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
         href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;800;900&amp;family=Geist:wght@400;500&amp;display=swap"
         rel="stylesheet" />
@@ -29,8 +35,8 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
         rel="stylesheet" />
     <!-- Three.js and OrbitControls -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <link rel="stylesheet" href="styles.css" />
 </head>
 
@@ -438,7 +444,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- TalkRealm -->
                         <div
-                            class="border-line p-6 flex flex-col h-full hover:bg-white/5 transition-colors duration-0 cursor-pointer">
+                            class="border-line p-6 flex flex-col h-full hover:bg-white/5 transition-none cursor-pointer">
                             <div class="flex justify-between items-start mb-4">
                                 <h4 class="font-body-lg text-body-lg text-primary font-bold">TalkRealm</h4>
                                 <a class="text-secondary hover:text-primary" href="https://chat.qrumi.org/"
@@ -481,7 +487,7 @@
             </div>
         </div>
     </footer>
-    <script src="script.js"></script>
+    <script defer src="script.js"></script>
 </body>
 
 </html>
