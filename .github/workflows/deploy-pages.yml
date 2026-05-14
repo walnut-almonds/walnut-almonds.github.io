@@ -28,7 +28,7 @@ jobs:
             - name: Setup Node.js
               uses: actions/setup-node@v4
               with:
-                  node-version: 20
+                  node-version: 24
                   cache: npm
 
             - name: Install dependencies
@@ -40,17 +40,8 @@ jobs:
             - name: Prepare deploy artifact
               run: |
                   mkdir -p dist
-                  rsync -av \
-                    --exclude '.git/' \
-                    --exclude '.github/' \
-                    --exclude 'node_modules/' \
-                    --exclude '*.md' \
-                    --exclude 'package.json' \
-                    --exclude 'package-lock.json' \
-                    --exclude 'tailwind.config.js' \
-                    --exclude 'tailwind.input.css' \
-                    --exclude 'LICENSE' \
-                    ./ dist/
+                  # Copy only tracked files into dist (avoids including dev files or node_modules)
+                  git checkout-index -a -f --prefix=dist/
 
             - name: Configure GitHub Pages
               uses: actions/configure-pages@v5
