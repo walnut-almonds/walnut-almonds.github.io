@@ -122,3 +122,41 @@ https://chat.qrumi.org/
 - Cake: https://www.cake.me/ewew61212
 - 104: https://pda.104.com.tw/profile/share/8u4csxeUdy2vb5JASn84iq7Z2kje6PWK
 - Website: https://qrumi.org/
+- Leetcode: https://leetcode.com/u/ewew61214/
+
+## 優缺點
+
+### 優點
+具備良好的邏輯思維與分析能力 
+和善不太會有情緒波動而影響工作
+樂於擁抱變化與快速學習
+
+### 缺點
+相較於邏輯思考，短期記憶力較弱 
+有人看著我非常容易緊張 
+習慣自己承擔責任，遇到問題前期較少主動求助 
+
+## 自我介紹
+
+### 一分鐘自我介紹用的模板
+```
+我是許凱傑（Alger），有約 5 年的 Golang 後端開發經驗 。主要專注於 Web Admin 系統開發、自動化爬蟲與資訊儲存系統 ，包含 RESTful 與 gRPC 的 API 設計 ，也熟悉多種資料庫與中間件如 MySQL、PostgreSQL、MongoDB、Redis、Kafka 及 Elastic Search 。此外，我有使用 Terraform 與 Ansible 在 AWS 和 GCP 雲端平台上建置基礎設施的實務經驗 。
+在 端點智能科技 期間，我主要負責 CDN 架構的設計與優化 。從前期的 Infra 構建開始，針對原有服務進行分析，利用 CDN 提升服務反應速度至平均 0.5 秒內，並有效增加系統的最大負載能力 。
+在 天堂遊戲 時，我則獨立完成多項專案與系統重構 ，開發過多個自動化資訊收集系統（如彩票數據與流量導向網站） ，並設計獨立的後端模組與 API 支援內部其他團隊需求 。
+過程中，我也負責維護與優化開發流程，將 GitLab CI/CD、Docker Compose 與 Shell Script 整合至工作流中 ，實現自動化部署與環境管理。
+此外，我也會撰寫一些 Python 腳本來優化工作流
+```
+
+### 投遞履歷用的模板
+```
+您好，我是許凱傑。擁有約 5 年的軟體開發經驗(4 年的 Golang 後端開發與 1 年的遊戲全端 Cocos + PHP 經驗)，負責設計與開發資料爬蟲系統、API 快取服務及多雲基礎設施
+熟悉 MySQL、Redis、MongoDB、Kafka 等技術，具備獨立分析問題與交付解決方案的能力
+曾主導跨雲端平台（AWS/GCP）的 IaC 導入，並具備 Prometheus/Grafana 監控指標與告警系統的實作經驗
+曾使用 Egret 與 Cocos Creator 搭配 TypeScript 獨立開發多款遊戲系統與功能，並主導 Slot 遊戲模組開發以加速團隊開發流程。雖然近幾年轉往後端與基礎設施發展，但對遊戲開發的熱情從未減少，私下也持續接觸 Unity 與 Unreal，期待能回歸遊戲開發領域，貢獻我跨領域的技術背景與對遊戲的熱忱。
+```
+```
+您好，我是許凱傑。擁有約 5 年的軟體開發經驗(4 年的 Golang 後端開發與 1 年的遊戲全端 Cocos + PHP 經驗)，負責設計與開發資料爬蟲系統、API 快取服務及多雲基礎設施
+熟悉 MySQL、Redis、MongoDB、Kafka 等技術，具備獨立分析問題與交付解決方案的能力
+曾主導跨雲端平台（AWS/GCP）的 IaC 導入，並具備 Prometheus/Grafana 監控指標與告警系統的實作經驗
+期待能在穩定的開發節奏中持續深化技術深度。
+```
