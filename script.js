@@ -134,6 +134,55 @@ document.addEventListener('DOMContentLoaded', () => {
             .reduce((acc, part) => (acc && acc[part] !== undefined ? acc[part] : undefined), root);
     }
 
+    function buildLocaleCandidates(lang) {
+        const fileName = `${lang}.json`;
+        const candidates = [];
+        const seen = new Set();
+
+        const addCandidate = (value) => {
+            if (!value || seen.has(value)) return;
+            seen.add(value);
+            candidates.push(value);
+        };
+
+        // Same-directory relative path (works for root and many static hosts).
+        addCandidate(`locales/${fileName}`);
+
+        const { origin, pathname } = window.location;
+        const segments = pathname.split('/').filter(Boolean);
+        const repoSegment = segments.length > 0 ? segments[0] : '';
+
+        // Absolute root path.
+        addCandidate(`${origin}/locales/${fileName}`);
+
+        // GitHub Pages project path (e.g. /repo-name/locales/*.json).
+        if (repoSegment) {
+            addCandidate(`${origin}/${repoSegment}/locales/${fileName}`);
+        }
+
+        return candidates;
+    }
+
+    async function fetchLocale(lang) {
+        const candidates = buildLocaleCandidates(lang);
+        let lastError = null;
+
+        for (const path of candidates) {
+            try {
+                const response = await fetch(path, { cache: 'no-cache' });
+                if (!response.ok) {
+                    lastError = new Error(`Locale fetch failed (${response.status}) for ${path}`);
+                    continue;
+                }
+                return await response.json();
+            } catch (error) {
+                lastError = error;
+            }
+        }
+
+        throw lastError || new Error(`Unable to load locale: ${lang}`);
+    }
+
     function applyTranslations(lang, payload, fallbackPayload) {
         const root = payload || {};
         const fallbackRoot = fallbackPayload || {};
@@ -180,15 +229,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             if (!translationCache[targetLang]) {
-                const response = await fetch(`locales/${targetLang}.json`);
-                if (!response.ok) throw new Error('Unable to load locale');
-                translationCache[targetLang] = await response.json();
+                translationCache[targetLang] = await fetchLocale(targetLang);
             }
 
             if (!translationCache[FALLBACK_LANG]) {
-                const fallbackResponse = await fetch(`locales/${FALLBACK_LANG}.json`);
-                if (!fallbackResponse.ok) throw new Error('Unable to load fallback locale');
-                translationCache[FALLBACK_LANG] = await fallbackResponse.json();
+                translationCache[FALLBACK_LANG] = await fetchLocale(FALLBACK_LANG);
             }
 
             applyTranslations(targetLang, translationCache[targetLang], translationCache[FALLBACK_LANG]);
