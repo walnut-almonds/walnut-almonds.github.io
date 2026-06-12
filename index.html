@@ -86,10 +86,16 @@
                     </div>
                 </div>
             </div>
-            <button id="mobile-menu-btn" class="md:hidden text-primary p-1" aria-label="Toggle menu"
-                aria-expanded="false">
-                <span class="material-symbols-outlined" id="mobile-menu-icon">menu</span>
-            </button>
+            <div class="md:hidden flex items-center gap-2">
+                <button id="theme-toggle-mobile" type="button" class="theme-toggle-btn" aria-label="Switch theme"
+                    title="Switch theme" aria-pressed="false">
+                    <span id="theme-toggle-mobile-icon" class="material-symbols-outlined"
+                        aria-hidden="true">dark_mode</span>
+                </button>
+                <button id="mobile-menu-btn" class="text-primary p-1" aria-label="Toggle menu" aria-expanded="false">
+                    <span class="material-symbols-outlined" id="mobile-menu-icon">menu</span>
+                </button>
+            </div>
         </div>
         <!-- Mobile Menu Drawer -->
         <div id="mobile-menu"
@@ -125,12 +131,6 @@
                         </div>
                     </div>
                 </div>
-                <button id="theme-toggle-mobile" type="button" class="theme-toggle-btn theme-toggle-btn-mobile"
-                    aria-label="Switch theme" title="Switch theme" aria-pressed="false">
-                    <span id="theme-toggle-mobile-icon" class="material-symbols-outlined"
-                        aria-hidden="true">dark_mode</span>
-                    <span>THEME</span>
-                </button>
             </nav>
         </div>
     </header>

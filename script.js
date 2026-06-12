@@ -336,15 +336,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const mobileThemeToggle = document.getElementById('theme-toggle-mobile');
     if (mobileThemeToggle) {
         themeToggleButtons.push(mobileThemeToggle);
-        mobileThemeToggle.addEventListener('click', () => {
-            toggleTheme();
-
-            if (menuBtn && menuDrawer && menuIcon) {
-                menuDrawer.classList.add('hidden');
-                menuIcon.textContent = 'menu';
-                menuBtn.setAttribute('aria-expanded', 'false');
-            }
-        });
+        mobileThemeToggle.addEventListener('click', toggleTheme);
     }
 
     const desktopDropdown = setupLanguageDropdown('lang-dropdown-desktop', (lang) => loadLanguage(lang));
