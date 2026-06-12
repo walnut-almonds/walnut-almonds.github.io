@@ -1,0 +1,86 @@
+{
+    "lang": {
+        "label": "中文(简体)",
+        "short": "简体"
+    },
+    "meta": {
+        "title": "Qrumi",
+        "description": "许凯杰的个人履历与作品网站，包含后端工程、CDN 与可扩展系统经验。"
+    },
+    "nav": {
+        "projects": "项目",
+        "talkrealm": "TalkRealm",
+        "resume": "履历",
+        "contact": "联系",
+        "hire": "联系我"
+    },
+    "hero": {
+        "titleLine1": "工程化",
+        "titleLine2": "系统",
+        "description": "我构建高性能、极简主义的软件架构，专精于高互动性的前端与可扩展的后端拓扑，连接刚性结构与有机交互。",
+        "cta": "探索数据"
+    },
+    "resume": {
+        "name": "许凯杰",
+        "englishName": "Alger Hsu",
+        "role": "// Go / 后端软件开发",
+        "location": "台北，台湾",
+        "skillsTitle": "// 技术参数",
+        "languages": "编程语言",
+        "databases": "数据库",
+        "cloud": "云与 CI/CD",
+        "monitoring": "监控与消息",
+        "otherSkills": "// 其他技能",
+        "design": "设计",
+        "gameEngine": "游戏引擎",
+        "languagesLabel": "语言",
+        "education": "// 教育背景",
+        "aboutTitle": "// 关于我",
+        "aboutText": "我是来自台湾台北的计算机工程师，热爱编程、开发和解决问题，希望能从事任何与程序相关的工作，持续学习与成长。",
+        "historyTitle": "// 工作经历",
+        "projectsTitle": "// 已部署作品",
+        "footer": "©2026 ALGER HSU // 保留所有权利",
+        "languageSwitch": "语言",
+        "chinese": "中文（繁体）",
+        "native": "母语",
+        "japanese": "日语",
+        "jlpt": "JLPT N2",
+        "english": "英语",
+        "basic": "基础"
+    },
+    "experience": {
+        "cdnRole": "CDN 工程师",
+        "cdnDescription": "负责既有 AWS Terraform IaC 代码库的扩展与重构，提升基础设施可维护性与跨环境复用性。",
+        "cdnBullet1": "承接并扩展既有 AWS Terraform IaC 代码库，提升基础设施可维护性与跨环境复用性。",
+        "cdnBullet2": "将 GCP 纳入多云策略，从零开始以 Terraform 构建 GCP 基础设施，统一双云平台的 IaC 开发规范与部署流程。",
+        "cdnBullet3": "使用 Ansible 编写 Playbook 进行服务器配置管理与应用程序部署自动化。",
+        "cdnBullet4": "部署并运维多套 Prometheus + Grafana 监控堆栈，涵盖各云端节点与服务的指标收集、仪表板可视化及告警规则设置，并将告警推送至 Telegram。",
+        "cdnBullet5": "诊断既有服务严重的 API 延迟问题，快速设计并实现 APICache Service 作为过渡方案，响应速度提升至 0.5 秒内。",
+        "cdnBullet6": "负责 CDN 正式架构的技术选型与方案评估，与团队共同制定最终架构设计与技术路线。",
+        "backendRole": "后端开发工程师",
+        "backendDescription": "主要使用 Golang，负责设计与开发数据整合与处理系统，涵盖 Web 爬虫、自动化信息收集与存储，并开发独立后端模块与 API。",
+        "backendBullet1": "开发彩票数据爬虫与分析系统，提供即时彩票数据与分析结果，并制作彩票分析网站进行导流。",
+        "backendBullet2": "开发体育数据爬虫并整合付费第三方数据源，实现即时赛事数据供应，构建体育分析网站。",
+        "backendBullet3": "独立开发股指彩票数据爬虫与数据收集系统，为公司主要业务平台拓展新玩法与增值服务。",
+        "backendBullet4": "对 DWH 项目进行系统性重构，消除重复代码，降低模块间耦合度与增加长期可维护性。",
+        "backendBullet5": "重新设计新 Crawler 架构，优化爬取效率与系统稳定性，并扩充多项数据采集功能。",
+        "backendBullet6": "支持并参与钱包服务的后端功能开发。",
+        "backendBullet7": "针对美术组的重复性作业流程开发自动化脚本工具，大幅提升工作效率并有效降低人为失误。",
+        "engineerRole": "软件工程师",
+        "engineerDescription": "以 Egret 与 Cocos Creator 搭配 TypeScript 开发游戏前后端程序，并负责 Linux 服务器日常维护。",
+        "engineerBullet1": "与 PM、2D 美术及特效美术协作，独立制作多款游戏内的游戏系统与功能。",
+        "engineerBullet2": "开发 Slot 游戏模块加快游戏开发流程，并协助其他团队成员使用该模块开发 Slot 游戏。",
+        "engineerBullet3": "改进游戏 AI 行为。",
+        "engineerBullet4": "开发 Python 自动化脚本，加快美术 Photoshop 到游戏引擎的工作流流程。"
+    },
+    "education": {
+        "school": "德明财经科技大学",
+        "department": "资讯科技系",
+        "icpc": "积极参与 ICPC、CPE 竞赛",
+        "robotCar": "自走车比赛季军",
+        "thesis": "毕业专题研究自平衡车系统"
+    },
+    "projects": {
+        "talkRealm": "基于 Web 的多人实时对话软件，前端采用 Vue，后端采用 Golang，实现基础聊天与语音直播通讯功能。"
+    }
+}

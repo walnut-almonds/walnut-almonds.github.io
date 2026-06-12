@@ -1,0 +1,86 @@
+{
+    "lang": {
+        "label": "中文(繁體)",
+        "short": "繁體"
+    },
+    "meta": {
+        "title": "Qrumi",
+        "description": "許凱傑的個人履歷與作品網站，包含後端工程、CDN 與可擴展系統經驗。"
+    },
+    "nav": {
+        "projects": "專案",
+        "talkrealm": "TalkRealm",
+        "resume": "履歷",
+        "contact": "聯絡",
+        "hire": "聯絡我"
+    },
+    "hero": {
+        "titleLine1": "工程化",
+        "titleLine2": "系統",
+        "description": "我打造高效能、極簡主義的軟體架構，專精於高互動性的前端與可擴展的後端拓撲，串起剛性結構與有機互動。",
+        "cta": "探索資料"
+    },
+    "resume": {
+        "name": "許凱傑",
+        "englishName": "Alger Hsu",
+        "role": "// GO / BACKEND SOFTWARE DEVELOPER",
+        "location": "台北，台灣",
+        "skillsTitle": "// 技術參數",
+        "languages": "程式語言",
+        "databases": "資料庫",
+        "cloud": "雲端與 CI/CD",
+        "monitoring": "監控與訊息",
+        "otherSkills": "// 其他技能",
+        "design": "設計",
+        "gameEngine": "遊戲引擎",
+        "languagesLabel": "語言",
+        "education": "// 教育背景",
+        "aboutTitle": "// 關於我",
+        "aboutText": "我是來自台灣台北的電腦工程師，熱愛程式設計、開發和解決問題，希望能夠從事程式相關的任何工作，持續學習和成長。",
+        "historyTitle": "// 工作經歷",
+        "projectsTitle": "// 已部署作品",
+        "footer": "©2026 ALGER HSU // ALL RIGHTS RESERVED",
+        "languageSwitch": "語言",
+        "chinese": "中文（繁體）",
+        "native": "母語",
+        "japanese": "日語",
+        "jlpt": "JLPT N2",
+        "english": "英語",
+        "basic": "基礎"
+    },
+    "experience": {
+        "cdnRole": "CDN 工程師",
+        "cdnDescription": "承接並擴展既有 AWS Terraform IaC 代碼庫，提升基礎設施可維護性與跨環境的可重複使用性。",
+        "cdnBullet1": "承接並擴展既有 AWS Terraform IaC 程式碼庫，提升基礎設施可維護性與跨環境的可重複使用性。",
+        "cdnBullet2": "將 GCP 納入多雲策略，從零開始以 Terraform 建置 GCP 基礎設施，統一雙雲平台的 IaC 開發規範與部署流程。",
+        "cdnBullet3": "使用 Ansible 撰寫 Playbook 進行伺服器組態管理與應用程式部署自動化。",
+        "cdnBullet4": "部署並維運多套 Prometheus + Grafana 監控堆疊，涵蓋各雲端節點與服務的指標收集、儀表板視覺化及告警規則設定，並將告警推播至 Telegram。",
+        "cdnBullet5": "診斷既有服務嚴重的 API 延遲問題，快速設計並實作 APICache Service 作為過渡方案，響應速度提升至 0.5 秒內。",
+        "cdnBullet6": "負責 CDN 正式架構的技術選型與方案評估，與團隊共同制定最終架構設計與技術路線。",
+        "backendRole": "後端工程師",
+        "backendDescription": "主要使用 Golang，負責設計與開發數據整合與處理系統，涵蓋 Web 爬蟲開發、自動化資訊收集與存儲，並開發獨立後端模組與 API。",
+        "backendBullet1": "開發彩票數據爬蟲與分析系統，提供即時彩票數據與分析結果，並製作彩票分析網站進行導流。",
+        "backendBullet2": "開發體育數據爬蟲並整合付費第三方資料源，實現即時賽事數據供應，建置體育分析網站。",
+        "backendBullet3": "獨立開發股指彩票數據爬蟲與資料收集系統，為公司主要業務平台拓展新玩法與增值服務。",
+        "backendBullet4": "對 DWH 專案進行系統性重構，消除重複程式碼，降低模組間耦合度與增加長期可維護性。",
+        "backendBullet5": "重新設計新 Crawler 架構，優化爬取效率與系統穩定性，並擴充多項數據採集功能。",
+        "backendBullet6": "支援並參與錢包服務的後端功能開發。",
+        "backendBullet7": "針對美術組的重複性作業流程開發自動化腳本工具，大幅提升工作效率並有效降低人為失誤。",
+        "engineerRole": "軟體工程師",
+        "engineerDescription": "以 Egret 與 Cocos Creator 引擎搭配 TypeScript 進行遊戲前後端程式開發，後端以 PHP 為主，並負責 Linux 伺服器日常維運。",
+        "engineerBullet1": "與 PM、2D 美術及特效美術協作，獨立製作多款遊戲內的遊戲系統與功能。",
+        "engineerBullet2": "開發 Slot 遊戲模組加快遊戲開發流程，並協助其他團隊成員使用該模組開發 Slot 遊戲。",
+        "engineerBullet3": "改進遊戲 AI 行為。",
+        "engineerBullet4": "開發 Python 自動化腳本，加快美術 Photoshop 到遊戲引擎的工作流流程。"
+    },
+    "education": {
+        "school": "德明財經科技大學",
+        "department": "資訊科技系",
+        "icpc": "積極參與 ICPC、CPE 競賽",
+        "robotCar": "自走車比賽季軍",
+        "thesis": "畢業專題研究自平衡車系統"
+    },
+    "projects": {
+        "talkRealm": "基於 Web 的多人即時對話軟體，前端使用 Vue 後端使用 Golang 實現，目前實現了基礎的聊天與語音直播通訊功能。"
+    }
+}

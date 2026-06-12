@@ -1,4 +1,207 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const LANG_KEY = 'site-lang';
+    const DEFAULT_LANG = 'en';
+    const SUPPORTED_LANGS = ['zh-TW', 'zh-CN', 'ja', 'en'];
+    const FALLBACK_LANG = 'en';
+    const LANG_SHORT = {
+        'zh-TW': 'TW',
+        'zh-CN': 'CN',
+        ja: 'JA',
+        en: 'EN'
+    };
+    const translationCache = {};
+    const dropdownControllers = [];
+
+    function normalizeLang(code) {
+        const fallback = String(code || '').toLowerCase();
+
+        if (fallback.startsWith('zh-cn') || fallback.startsWith('zh-hans')) return 'zh-CN';
+        if (fallback.startsWith('zh')) return 'zh-TW';
+        if (fallback.startsWith('ja') || fallback === 'jp') return 'ja';
+        if (fallback.startsWith('en')) return 'en';
+
+        return DEFAULT_LANG;
+    }
+
+    function getInitialLanguage() {
+        const queryLang = new URLSearchParams(window.location.search).get('lang');
+        if (queryLang) return normalizeLang(queryLang);
+
+        const storedLang = localStorage.getItem(LANG_KEY);
+        if (storedLang && SUPPORTED_LANGS.includes(storedLang)) return storedLang;
+
+        return normalizeLang(navigator.language || DEFAULT_LANG);
+    }
+
+    function setActiveLanguage(lang) {
+        dropdownControllers.forEach((controller) => controller.setValue(lang));
+    }
+
+    function setupLanguageDropdown(rootId, onSelect) {
+        const root = document.getElementById(rootId);
+        if (!root) return null;
+
+        const trigger = root.querySelector('.lang-select-trigger');
+        const menu = root.querySelector('.lang-menu');
+        const current = root.querySelector('.lang-current');
+        const options = Array.from(root.querySelectorAll('.lang-option'));
+        if (!trigger || !menu || !current || options.length === 0) return null;
+
+        const close = () => {
+            menu.classList.add('hidden');
+            root.classList.remove('is-open');
+            trigger.setAttribute('aria-expanded', 'false');
+        };
+
+        const open = () => {
+            menu.classList.remove('hidden');
+            root.classList.add('is-open');
+            trigger.setAttribute('aria-expanded', 'true');
+        };
+
+        const setValue = (lang) => {
+            const resolved = SUPPORTED_LANGS.includes(lang) ? lang : DEFAULT_LANG;
+            current.textContent = LANG_SHORT[resolved] || LANG_SHORT[DEFAULT_LANG];
+
+            options.forEach((option) => {
+                const isSelected = option.dataset.lang === resolved;
+                option.setAttribute('aria-selected', String(isSelected));
+            });
+        };
+
+        trigger.addEventListener('click', () => {
+            if (menu.classList.contains('hidden')) {
+                open();
+            } else {
+                close();
+            }
+        });
+
+        trigger.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                open();
+                const selected = options.find((option) => option.getAttribute('aria-selected') === 'true') || options[0];
+                selected.focus();
+            }
+            if (event.key === 'Escape') {
+                close();
+            }
+        });
+
+        options.forEach((option, index) => {
+            option.addEventListener('click', () => {
+                const lang = option.dataset.lang;
+                if (!lang) return;
+                onSelect(lang);
+                close();
+            });
+
+            option.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    event.preventDefault();
+                    close();
+                    trigger.focus();
+                    return;
+                }
+
+                if (event.key === 'ArrowDown') {
+                    event.preventDefault();
+                    const nextIndex = (index + 1) % options.length;
+                    options[nextIndex].focus();
+                }
+
+                if (event.key === 'ArrowUp') {
+                    event.preventDefault();
+                    const prevIndex = (index - 1 + options.length) % options.length;
+                    options[prevIndex].focus();
+                }
+            });
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!root.contains(event.target)) {
+                close();
+            }
+        });
+
+        return { close, setValue };
+    }
+
+    function resolveValue(root, key) {
+        return String(key || '')
+            .split('.')
+            .reduce((acc, part) => (acc && acc[part] !== undefined ? acc[part] : undefined), root);
+    }
+
+    function applyTranslations(lang, payload, fallbackPayload) {
+        const root = payload || {};
+        const fallbackRoot = fallbackPayload || {};
+
+        document.querySelectorAll('[data-i18n]').forEach((node) => {
+            const key = node.getAttribute('data-i18n');
+            const value = resolveValue(root, key);
+            const fallbackValue = resolveValue(fallbackRoot, key);
+            const finalValue = (typeof value === 'string' && value.trim().length > 0) ? value : fallbackValue;
+
+            if (typeof finalValue === 'string' && finalValue.trim().length > 0) {
+                node.textContent = finalValue;
+            }
+        });
+
+        document.querySelectorAll('[data-i18n-aria]').forEach((node) => {
+            const key = node.getAttribute('data-i18n-aria');
+            const value = resolveValue(root, key);
+            const fallbackValue = resolveValue(fallbackRoot, key);
+            const finalValue = (typeof value === 'string' && value.trim().length > 0) ? value : fallbackValue;
+
+            if (typeof finalValue === 'string' && finalValue.trim().length > 0) {
+                node.setAttribute('aria-label', finalValue);
+                node.setAttribute('title', finalValue);
+            }
+        });
+
+        const metaDescription = document.querySelector('meta[name="description"]');
+        const metaValue = resolveValue(root, 'meta.description');
+        const metaFallback = resolveValue(fallbackRoot, 'meta.description');
+        const finalMeta = (typeof metaValue === 'string' && metaValue.trim().length > 0) ? metaValue : metaFallback;
+
+        if (metaDescription && typeof finalMeta === 'string' && finalMeta.trim().length > 0) {
+            metaDescription.setAttribute('content', finalMeta);
+        }
+
+        document.documentElement.lang = lang;
+        document.title = resolveValue(root, 'meta.title') || resolveValue(fallbackRoot, 'meta.title') || document.title;
+        setActiveLanguage(lang);
+    }
+
+    async function loadLanguage(lang) {
+        const targetLang = normalizeLang(lang);
+
+        try {
+            if (!translationCache[targetLang]) {
+                const response = await fetch(`locales/${targetLang}.json`);
+                if (!response.ok) throw new Error('Unable to load locale');
+                translationCache[targetLang] = await response.json();
+            }
+
+            if (!translationCache[FALLBACK_LANG]) {
+                const fallbackResponse = await fetch(`locales/${FALLBACK_LANG}.json`);
+                if (!fallbackResponse.ok) throw new Error('Unable to load fallback locale');
+                translationCache[FALLBACK_LANG] = await fallbackResponse.json();
+            }
+
+            applyTranslations(targetLang, translationCache[targetLang], translationCache[FALLBACK_LANG]);
+            localStorage.setItem(LANG_KEY, targetLang);
+            window.history.replaceState({}, '', `${window.location.pathname}?lang=${targetLang}${window.location.hash}`);
+        } catch (error) {
+            console.error('Translation load failed:', error);
+            if (targetLang !== FALLBACK_LANG) {
+                loadLanguage(FALLBACK_LANG);
+            }
+        }
+    }
+
     // Mobile menu toggle
     const menuBtn = document.getElementById('mobile-menu-btn');
     const menuDrawer = document.getElementById('mobile-menu');
@@ -12,8 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
             menuBtn.setAttribute('aria-expanded', String(!isOpen));
         });
 
-        // Close menu when a nav link is clicked
-        menuDrawer.querySelectorAll('a').forEach(link => {
+        menuDrawer.querySelectorAll('a').forEach((link) => {
             link.addEventListener('click', () => {
                 menuDrawer.classList.add('hidden');
                 menuIcon.textContent = 'menu';
@@ -21,6 +223,22 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+
+    const desktopDropdown = setupLanguageDropdown('lang-dropdown-desktop', (lang) => loadLanguage(lang));
+    if (desktopDropdown) dropdownControllers.push(desktopDropdown);
+
+    const mobileDropdown = setupLanguageDropdown('lang-dropdown-mobile', (lang) => {
+        loadLanguage(lang);
+
+        if (menuBtn && menuDrawer && menuIcon) {
+            menuDrawer.classList.add('hidden');
+            menuIcon.textContent = 'menu';
+            menuBtn.setAttribute('aria-expanded', 'false');
+        }
+    });
+    if (mobileDropdown) dropdownControllers.push(mobileDropdown);
+
+    loadLanguage(getInitialLanguage());
 
     // Three.js canvas
     const canvas = document.getElementById('three-canvas');

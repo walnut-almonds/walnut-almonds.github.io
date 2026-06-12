@@ -1,0 +1,86 @@
+{
+    "lang": {
+        "label": "English",
+        "short": "EN"
+    },
+    "meta": {
+        "title": "Qrumi",
+        "description": "Alger Hsu's personal resume and portfolio site featuring backend engineering, CDN, and scalable systems work."
+    },
+    "nav": {
+        "projects": "Projects",
+        "talkrealm": "TalkRealm",
+        "resume": "Resume",
+        "contact": "Contact",
+        "hire": "Hire me"
+    },
+    "hero": {
+        "titleLine1": "ENGINEERING",
+        "titleLine2": "SYSTEMS",
+        "description": "I build high-performance, minimalist software architectures. Specializing in highly interactive front-ends and scalable backend topologies that bridge rigid structure with organic interaction.",
+        "cta": "EXPLORE DATA"
+    },
+    "resume": {
+        "name": "Kai-Jie Hsu",
+        "englishName": "Alger Hsu",
+        "role": "// GO / BACKEND SOFTWARE DEVELOPER",
+        "location": "Taipei, Taiwan",
+        "skillsTitle": "// TECHNICAL STACK",
+        "languages": "PROGRAMMING LANGUAGES",
+        "databases": "DATABASES",
+        "cloud": "CLOUD & CI/CD",
+        "monitoring": "MONITORING & MESSAGING",
+        "otherSkills": "// OTHER SKILLS",
+        "design": "DESIGN",
+        "gameEngine": "GAME ENGINE",
+        "languagesLabel": "LANGUAGES",
+        "education": "// EDUCATION",
+        "aboutTitle": "// ABOUT ME",
+        "aboutText": "I am a computer engineer from Taipei, Taiwan. I enjoy programming, development, and solving problems, and I want to keep learning across different technical domains.",
+        "historyTitle": "// EXPERIENCE",
+        "projectsTitle": "// DEPLOYED PROJECTS",
+        "footer": "©2026 ALGER HSU // ALL RIGHTS RESERVED",
+        "languageSwitch": "Language",
+        "chinese": "Chinese (Traditional)",
+        "native": "NATIVE",
+        "japanese": "Japanese",
+        "jlpt": "JLPT N2",
+        "english": "English",
+        "basic": "BASIC"
+    },
+    "experience": {
+        "cdnRole": "CDN Engineer",
+        "cdnDescription": "Extended and improved the existing AWS Terraform IaC codebase to increase infrastructure maintainability and cross-environment reuse.",
+        "cdnBullet1": "Extended and improved the existing AWS Terraform IaC codebase to increase infrastructure maintainability and cross-environment reuse.",
+        "cdnBullet2": "Adopted GCP into a multi-cloud strategy, building GCP infrastructure from scratch with Terraform and standardizing IaC development rules and deployment workflows across both clouds.",
+        "cdnBullet3": "Wrote Ansible playbooks to automate server configuration management and application deployment.",
+        "cdnBullet4": "Deployed and operated Prometheus + Grafana monitoring stacks across cloud nodes and services, including metrics collection, dashboards, alerts, and Telegram notifications.",
+        "cdnBullet5": "Diagnosed severe API latency issues, designed and implemented an APICache Service as a transitional solution, reducing response time to under 0.5 seconds.",
+        "cdnBullet6": "Led CDN architecture evaluation and technical selection, working with the team to define the final design and roadmap.",
+        "backendRole": "Backend Developer",
+        "backendDescription": "Built data integration and processing systems with Golang, including web crawler development, automated information collection, storage, and independent backend modules and APIs.",
+        "backendBullet1": "Developed lottery data crawler and analytics systems to provide real-time lottery data and results, and built a lottery analysis site for traffic generation.",
+        "backendBullet2": "Built sports data crawlers and integrated paid third-party sources to provide real-time match data and launched sports analysis websites.",
+        "backendBullet3": "Independently developed index-lottery data crawlers and collection systems to expand new features and value-added services for the company’s main business platform.",
+        "backendBullet4": "Refactored the DWH project systematically to remove duplicate code, reduce coupling, and improve long-term maintainability.",
+        "backendBullet5": "Redesigned the crawler architecture to improve crawling efficiency, system stability, and expand data collection features.",
+        "backendBullet6": "Supported and contributed to backend development for wallet services.",
+        "backendBullet7": "Created automation scripts for repetitive art-team workflows, significantly improving efficiency and reducing human error.",
+        "engineerRole": "Software Engineer",
+        "engineerDescription": "Developed game frontend and backend systems with Egret, Cocos Creator, and TypeScript, and handled Linux server operations and maintenance.",
+        "engineerBullet1": "Worked with PM, 2D artists, and VFX artists to independently build multiple in-game systems and features.",
+        "engineerBullet2": "Developed reusable Slot game modules to speed up project delivery and helped other team members use them for new Slot titles.",
+        "engineerBullet3": "Improved game AI behavior.",
+        "engineerBullet4": "Built Python automation scripts to streamline the workflow from Photoshop assets to the game engine."
+    },
+    "education": {
+        "school": "Takming University of Science and Technology (TMUST)",
+        "department": "Department of Information Technology",
+        "icpc": "Actively participated in ICPC and CPE competitions",
+        "robotCar": "Runner-up in the autonomous vehicle competition",
+        "thesis": "Graduation project focused on a self-balancing vehicle system"
+    },
+    "projects": {
+        "talkRealm": "A web-based multi-user real-time chat application using Vue on the frontend and Golang on the backend, with basic chat and voice live-stream communication features."
+    }
+}

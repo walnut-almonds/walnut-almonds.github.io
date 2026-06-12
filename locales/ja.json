@@ -1,0 +1,86 @@
+{
+    "lang": {
+        "label": "日本語",
+        "short": "JA"
+    },
+    "meta": {
+        "title": "Qrumi",
+        "description": "許凱傑のポートフォリオ兼履歴書。バックエンド開発、CDN、拡張可能なシステム設計の実績を紹介します。"
+    },
+    "nav": {
+        "projects": "プロジェクト",
+        "talkrealm": "TalkRealm",
+        "resume": "履歴書",
+        "contact": "連絡先",
+        "hire": "お問い合わせ"
+    },
+    "hero": {
+        "titleLine1": "ENGINEERING",
+        "titleLine2": "SYSTEMS",
+        "description": "高性能でミニマルなソフトウェアアーキテクチャを構築し、高い対話性を持つフロントエンドと拡張可能なバックエンド構成に特化しています。",
+        "cta": "データを見る"
+    },
+    "resume": {
+        "name": "許凱傑",
+        "englishName": "Alger Hsu",
+        "role": "// GO / バックエンドソフトウェア開発者",
+        "location": "台北、台湾",
+        "skillsTitle": "// 技術パラメータ",
+        "languages": "プログラミング言語",
+        "databases": "データベース",
+        "cloud": "クラウド & CI/CD",
+        "monitoring": "監視 & メッセージング",
+        "otherSkills": "// その他のスキル",
+        "design": "デザイン",
+        "gameEngine": "ゲームエンジン",
+        "languagesLabel": "言語",
+        "education": "// 学歴",
+        "aboutTitle": "// 自己紹介",
+        "aboutText": "台湾台北出身のコンピュータエンジニアです。プログラミング、開発、問題解決が好きで、さまざまな技術領域を学び続けています。",
+        "historyTitle": "// 実務経歴",
+        "projectsTitle": "// デプロイ済み成果物",
+        "footer": "©2026 ALGER HSU // ALL RIGHTS RESERVED",
+        "languageSwitch": "言語",
+        "chinese": "中国語（繁体字）",
+        "native": "ネイティブ",
+        "japanese": "日本語",
+        "jlpt": "JLPT N2",
+        "english": "英語",
+        "basic": "初級"
+    },
+    "experience": {
+        "cdnRole": "CDN エンジニア",
+        "cdnDescription": "既存の AWS Terraform IaC コードベースを拡張・改善し、インフラの保守性と再利用性を高めました。",
+        "cdnBullet1": "既存の AWS Terraform IaC コードベースを引き継ぎ、拡張してインフラの保守性と環境間の再利用性を高めました。",
+        "cdnBullet2": "GCP をマルチクラウド戦略に組み込み、Terraform でゼロから GCP インフラを構築し、両クラウド基盤の IaC 開発規約とデプロイ手順を統一しました。",
+        "cdnBullet3": "Ansible の Playbook を用いてサーバー構成管理とアプリケーションデプロイの自動化を行いました。",
+        "cdnBullet4": "Prometheus + Grafana の監視スタックを複数構築し、各クラウドノードとサービスのメトリクス収集、ダッシュボード可視化、アラート設定を運用し、Telegram へ通知を送信しました。",
+        "cdnBullet5": "既存サービスの深刻な API 遅延を診断し、過渡的な解決策として APICache Service を設計・実装して応答速度を 0.5 秒以内に改善しました。",
+        "cdnBullet6": "CDN の正式なアーキテクチャ選定と方針評価を担当し、チームと共に最終設計と技術方針を決定しました。",
+        "backendRole": "バックエンド開発者",
+        "backendDescription": "主に Golang を使用し、データ統合・処理システムの設計・開発を担当しました。Web クローラー、情報収集、自動保存、独立バックエンドモジュールや API の実装などを行いました。",
+        "backendBullet1": "宝くじデータのクローラーと分析システムを開発し、リアルタイムデータと分析結果を提供し、宝くじ分析サイトを運営して導線を確保しました。",
+        "backendBullet2": "スポーツデータのクローラーを開発し、有料のサードパーティデータソースを統合してリアルタイムの試合データ供給を実現し、スポーツ分析サイトを構築しました。",
+        "backendBullet3": "株価宝くじデータのクローラーとデータ収集システムを単独で開発し、会社の主要業務プラットフォームに新たな遊びと付加価値を拡張しました。",
+        "backendBullet4": "DWH プロジェクトを体系的にリファクタリングし、重複コードを排除してモジュール間の結合を弱め、長期的な保守性を高めました。",
+        "backendBullet5": "新しい Crawler アーキテクチャを再設計し、収集効率とシステム安定性を改善し、複数のデータ収集機能を拡張しました。",
+        "backendBullet6": "ウォレットサービスのバックエンド機能開発をサポートし、参加しました。",
+        "backendBullet7": "美術チームの繰り返し作業を自動化するスクリプトツールを開発し、作業効率を大幅に向上させ、人為的ミスを抑えました。",
+        "engineerRole": "ソフトウェアエンジニア",
+        "engineerDescription": "Egret と Cocos Creator、TypeScript を使ってゲームのフロントエンドとバックエンドを開発し、Linux サーバーの運用保守も担当しました。",
+        "engineerBullet1": "PM、2D 美術、エフェクト美術と協力し、ゲーム内の複数のシステムと機能を単独で制作しました。",
+        "engineerBullet2": "Slot ゲームモジュールを開発して開発スピードを上げ、他チームメンバーがそのモジュールで Slot ゲームを開発できるよう支援しました。",
+        "engineerBullet3": "ゲーム AI の挙動を改善しました。",
+        "engineerBullet4": "Python 自動化スクリプトを開発し、美術の Photoshop からゲームエンジンへのワークフローを高速化しました。"
+    },
+    "education": {
+        "school": "德明財經科技大學",
+        "department": "資訊科技系",
+        "icpc": "ICPC と CPE の競技会に積極的に参加",
+        "robotCar": "自律走行車競技で準優勝",
+        "thesis": "卒業研究テーマは自律走行車システム"
+    },
+    "projects": {
+        "talkRealm": "Web ベースの複数人リアルタイム会話アプリ。Vue をフロントエンド、Golang をバックエンドに使用し、基本的なチャットと音声ライブ配信機能を実装しています。"
+    }
+}
