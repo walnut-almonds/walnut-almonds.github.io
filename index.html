@@ -59,7 +59,12 @@
                 <a class="text-on-surface-variant hover:bg-primary hover:text-background transition-none px-2 py-1"
                     href="#hire-me" data-i18n="nav.contact">CONTACT</a>
             </nav>
-            <div class="hidden md:flex items-center">
+            <div class="hidden md:flex items-center gap-2">
+                <button id="theme-toggle-desktop" type="button" class="theme-toggle-btn" aria-label="Switch theme"
+                    title="Switch theme" aria-pressed="false">
+                    <span id="theme-toggle-desktop-icon" class="material-symbols-outlined"
+                        aria-hidden="true">dark_mode</span>
+                </button>
                 <div id="lang-dropdown-desktop" class="items-center custom-lang-dropdown lang-switch-icon">
                     <div class="lang-select-shell">
                         <button id="lang-trigger" type="button" aria-haspopup="listbox" aria-expanded="false"
@@ -120,6 +125,12 @@
                         </div>
                     </div>
                 </div>
+                <button id="theme-toggle-mobile" type="button" class="theme-toggle-btn theme-toggle-btn-mobile"
+                    aria-label="Switch theme" title="Switch theme" aria-pressed="false">
+                    <span id="theme-toggle-mobile-icon" class="material-symbols-outlined"
+                        aria-hidden="true">dark_mode</span>
+                    <span>THEME</span>
+                </button>
             </nav>
         </div>
     </header>

@@ -1,16 +1,73 @@
 document.addEventListener('DOMContentLoaded', () => {
     const LANG_KEY = 'site-lang';
+    const THEME_KEY = 'site-theme';
     const DEFAULT_LANG = 'en';
     const SUPPORTED_LANGS = ['zh-TW', 'zh-CN', 'ja', 'en'];
     const FALLBACK_LANG = 'en';
+    const DEFAULT_THEME = 'dark';
+    const SUPPORTED_THEMES = ['dark', 'light'];
     const LANG_SHORT = {
         'zh-TW': 'TW',
         'zh-CN': 'CN',
         ja: 'JA',
         en: 'EN'
     };
+    const THEME_LABELS = {
+        'zh-TW': { dark: '切換為亮色主題', light: '切換為暗色主題' },
+        'zh-CN': { dark: '切换为亮色主题', light: '切换为暗色主题' },
+        ja: { dark: 'ライトテーマに切り替え', light: 'ダークテーマに切り替え' },
+        en: { dark: 'Switch to light theme', light: 'Switch to dark theme' }
+    };
     const translationCache = {};
     const dropdownControllers = [];
+    const themeToggleButtons = [];
+    let activeTheme = DEFAULT_THEME;
+
+    function normalizeTheme(theme) {
+        return SUPPORTED_THEMES.includes(theme) ? theme : DEFAULT_THEME;
+    }
+
+    function getInitialTheme() {
+        const storedTheme = localStorage.getItem(THEME_KEY);
+        return normalizeTheme(storedTheme);
+    }
+
+    function getThemeToggleLabel(theme) {
+        const lang = normalizeLang(document.documentElement.lang || DEFAULT_LANG);
+        const labels = THEME_LABELS[lang] || THEME_LABELS[DEFAULT_LANG];
+        return theme === 'dark' ? labels.dark : labels.light;
+    }
+
+    function syncThemeToggleButtons(theme) {
+        const iconName = theme === 'dark' ? 'dark_mode' : 'light_mode';
+        const label = getThemeToggleLabel(theme);
+
+        themeToggleButtons.forEach((button) => {
+            const icon = button.querySelector('.material-symbols-outlined');
+            if (icon) icon.textContent = iconName;
+            button.setAttribute('aria-label', label);
+            button.setAttribute('title', label);
+            button.setAttribute('aria-pressed', String(theme === 'light'));
+        });
+    }
+
+    function applyTheme(theme, { persist = true } = {}) {
+        activeTheme = normalizeTheme(theme);
+
+        document.documentElement.classList.remove('dark', 'light');
+        document.documentElement.classList.add(activeTheme);
+        syncThemeToggleButtons(activeTheme);
+        document.dispatchEvent(new CustomEvent('themechange', { detail: { theme: activeTheme } }));
+
+        if (persist) {
+            localStorage.setItem(THEME_KEY, activeTheme);
+        }
+    }
+
+    function toggleTheme() {
+        const nextTheme = activeTheme === 'dark' ? 'light' : 'dark';
+        applyTheme(nextTheme);
+    }
 
     function normalizeLang(code) {
         const fallback = String(code || '').toLowerCase();
@@ -222,6 +279,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.documentElement.lang = lang;
         document.title = resolveValue(root, 'meta.title') || resolveValue(fallbackRoot, 'meta.title') || document.title;
         setActiveLanguage(lang);
+        syncThemeToggleButtons(activeTheme);
     }
 
     async function loadLanguage(lang) {
@@ -269,6 +327,26 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    const desktopThemeToggle = document.getElementById('theme-toggle-desktop');
+    if (desktopThemeToggle) {
+        themeToggleButtons.push(desktopThemeToggle);
+        desktopThemeToggle.addEventListener('click', toggleTheme);
+    }
+
+    const mobileThemeToggle = document.getElementById('theme-toggle-mobile');
+    if (mobileThemeToggle) {
+        themeToggleButtons.push(mobileThemeToggle);
+        mobileThemeToggle.addEventListener('click', () => {
+            toggleTheme();
+
+            if (menuBtn && menuDrawer && menuIcon) {
+                menuDrawer.classList.add('hidden');
+                menuIcon.textContent = 'menu';
+                menuBtn.setAttribute('aria-expanded', 'false');
+            }
+        });
+    }
+
     const desktopDropdown = setupLanguageDropdown('lang-dropdown-desktop', (lang) => loadLanguage(lang));
     if (desktopDropdown) dropdownControllers.push(desktopDropdown);
 
@@ -283,6 +361,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     if (mobileDropdown) dropdownControllers.push(mobileDropdown);
 
+    applyTheme(getInitialTheme(), { persist: false });
     loadLanguage(getInitialLanguage());
 
     // Three.js canvas
@@ -383,6 +462,22 @@ document.addEventListener('DOMContentLoaded', () => {
     controls.enablePan = false;
     controls.autoRotate = true;
     controls.autoRotateSpeed = 0.5;
+
+    function applyThreeTheme(theme) {
+        const isLight = theme === 'light';
+
+        scene.fog.color.set(isLight ? '#f3f6fc' : '#131313');
+        scene.fog.density = isLight ? 0.01 : 0.015;
+        lineMaterial.color.set(isLight ? '#8fa1bf' : '#333333');
+        lineMaterial.opacity = isLight ? 0.18 : 0.3;
+        nodesMaterial.opacity = isLight ? 0.72 : 0.9;
+        renderer.setClearColor(isLight ? 0xf7f9fc : 0x131313, 0);
+    }
+
+    applyThreeTheme(activeTheme);
+    document.addEventListener('themechange', (event) => {
+        applyThreeTheme(event.detail.theme);
+    });
 
     let animationId;
 
