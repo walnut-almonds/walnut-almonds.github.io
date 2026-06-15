@@ -12,6 +12,12 @@ document.addEventListener('DOMContentLoaded', () => {
         ja: '日本語',
         en: 'English'
     };
+    const OG_LOCALES = {
+        'zh-TW': 'zh_TW',
+        'zh-CN': 'zh_CN',
+        ja: 'ja_JP',
+        en: 'en_US'
+    };
     const THEME_LABELS = {
         'zh-TW': { dark: '切換為亮色主題', light: '切換為暗色主題' },
         'zh-CN': { dark: '切换为亮色主题', light: '切换为暗色主题' },
@@ -195,6 +201,68 @@ document.addEventListener('DOMContentLoaded', () => {
             .reduce((acc, part) => (acc && acc[part] !== undefined ? acc[part] : undefined), root);
     }
 
+    function buildLocaleUrl(lang) {
+        const path = window.location.pathname || '/';
+        const hash = window.location.hash || '';
+        return `${window.location.origin}${path}?lang=${lang}${hash}`;
+    }
+
+    function updateAlternateLanguageLinks(lang) {
+        const head = document.head;
+        if (!head) return;
+
+        document.querySelectorAll('link[rel="alternate"]').forEach((link) => {
+            if (typeof link.remove === 'function') {
+                link.remove();
+            }
+        });
+
+        SUPPORTED_LANGS.forEach((locale) => {
+            const link = document.createElement('link');
+            link.setAttribute('rel', 'alternate');
+            link.setAttribute('hreflang', locale);
+            link.setAttribute('href', buildLocaleUrl(locale));
+            head.appendChild(link);
+        });
+
+        const xDefault = document.createElement('link');
+        xDefault.setAttribute('rel', 'alternate');
+        xDefault.setAttribute('hreflang', 'x-default');
+        xDefault.setAttribute('href', buildLocaleUrl('en'));
+        head.appendChild(xDefault);
+
+        const canonicalLink = document.querySelector('link[rel="canonical"]');
+        if (canonicalLink) {
+            canonicalLink.setAttribute('href', buildLocaleUrl(lang));
+        }
+    }
+
+    function updateSeoMetadata(lang, payload, fallbackPayload) {
+        const root = payload || {};
+        const fallbackRoot = fallbackPayload || {};
+
+        const title = resolveValue(root, 'meta.title') || resolveValue(fallbackRoot, 'meta.title') || document.title;
+        const description = resolveValue(root, 'meta.description') || resolveValue(fallbackRoot, 'meta.description') || '';
+
+        const metaDescription = document.querySelector('meta[name="description"]');
+        const ogTitle = document.querySelector('meta[property="og:title"]');
+        const ogDescription = document.querySelector('meta[property="og:description"]');
+        const ogUrl = document.querySelector('meta[property="og:url"]');
+        const ogLocale = document.querySelector('meta[property="og:locale"]');
+        const twitterTitle = document.querySelector('meta[name="twitter:title"]');
+        const twitterDescription = document.querySelector('meta[name="twitter:description"]');
+
+        if (metaDescription && description) metaDescription.setAttribute('content', description);
+        if (ogTitle && title) ogTitle.setAttribute('content', title);
+        if (ogDescription && description) ogDescription.setAttribute('content', description);
+        if (ogUrl) ogUrl.setAttribute('content', buildLocaleUrl(lang));
+        if (ogLocale) ogLocale.setAttribute('content', OG_LOCALES[lang] || OG_LOCALES.en);
+        if (twitterTitle && title) twitterTitle.setAttribute('content', title);
+        if (twitterDescription && description) twitterDescription.setAttribute('content', description);
+
+        updateAlternateLanguageLinks(lang);
+    }
+
     function buildLocaleCandidates(lang) {
         const fileName = `${lang}.json`;
         const candidates = [];
@@ -271,17 +339,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        const metaDescription = document.querySelector('meta[name="description"]');
-        const metaValue = resolveValue(root, 'meta.description');
-        const metaFallback = resolveValue(fallbackRoot, 'meta.description');
-        const finalMeta = (typeof metaValue === 'string' && metaValue.trim().length > 0) ? metaValue : metaFallback;
-
-        if (metaDescription && typeof finalMeta === 'string' && finalMeta.trim().length > 0) {
-            metaDescription.setAttribute('content', finalMeta);
-        }
-
         document.documentElement.lang = lang;
         document.title = resolveValue(root, 'meta.title') || resolveValue(fallbackRoot, 'meta.title') || document.title;
+        updateSeoMetadata(lang, root, fallbackRoot);
         setActiveLanguage(lang);
         syncThemeToggleButtons(activeTheme);
     }
@@ -298,9 +358,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 translationCache[FALLBACK_LANG] = await fetchLocale(FALLBACK_LANG);
             }
 
+            const nextUrl = `${window.location.pathname}?lang=${targetLang}${window.location.hash}`;
             applyTranslations(targetLang, translationCache[targetLang], translationCache[FALLBACK_LANG]);
             localStorage.setItem(LANG_KEY, targetLang);
-            window.history.replaceState({}, '', `${window.location.pathname}?lang=${targetLang}${window.location.hash}`);
+            window.history.replaceState({}, '', nextUrl);
         } catch (error) {
             console.error('Translation load failed:', error);
             if (targetLang !== FALLBACK_LANG) {
