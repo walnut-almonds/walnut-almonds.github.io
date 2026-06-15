@@ -92,6 +92,7 @@ html.light {
     font-family: 'Geist', monospace;
     font-size: 11px;
     letter-spacing: 0.14em;
+    text-transform: none;
     line-height: 1;
     padding: 0.68rem 2rem 0.68rem 0.8rem;
     transition: none;
@@ -143,6 +144,7 @@ html.light {
     font-family: 'Geist', monospace;
     font-size: 11px;
     letter-spacing: 0.14em;
+    text-transform: none;
     text-align: left;
     padding: 0.62rem 0.8rem;
     cursor: pointer;

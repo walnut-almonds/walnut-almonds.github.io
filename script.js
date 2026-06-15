@@ -7,10 +7,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const DEFAULT_THEME = 'dark';
     const SUPPORTED_THEMES = ['dark', 'light'];
     const LANG_SHORT = {
-        'zh-TW': 'TW',
-        'zh-CN': 'CN',
-        ja: 'JA',
-        en: 'EN'
+        'zh-TW': '繁體中文',
+        'zh-CN': '简体中文',
+        ja: '日本語',
+        en: 'English'
     };
     const THEME_LABELS = {
         'zh-TW': { dark: '切換為亮色主題', light: '切換為暗色主題' },
