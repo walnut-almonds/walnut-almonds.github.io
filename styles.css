@@ -145,6 +145,7 @@ html.light {
     font-size: 11px;
     letter-spacing: 0.14em;
     text-transform: none;
+    white-space: nowrap;
     text-align: left;
     padding: 0.62rem 0.8rem;
     cursor: pointer;
@@ -165,6 +166,26 @@ html.light {
 .lang-option[aria-selected='true'] {
     background-color: rgba(179, 198, 243, 0.16);
     color: #b3c6f3;
+}
+
+.lang-current[lang='zh-TW'],
+.lang-option[lang='zh-TW'] {
+    font-family: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', 'Heiti TC', sans-serif;
+}
+
+.lang-current[lang='zh-CN'],
+.lang-option[lang='zh-CN'] {
+    font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', 'Heiti SC', sans-serif;
+}
+
+.lang-current[lang='ja'],
+.lang-option[lang='ja'] {
+    font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Meiryo', sans-serif;
+}
+
+.lang-current[lang='en'],
+.lang-option[lang='en'] {
+    font-family: 'Geist', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
 }
 
 .lang-switch-mobile {
@@ -226,7 +247,7 @@ html.light {
 .lang-switch-icon .lang-menu {
     right: -18px;
     left: auto;
-    min-width: 78px;
+    min-width: 120px;
 }
 
 .theme-toggle-btn {

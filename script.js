@@ -119,8 +119,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const setValue = (lang) => {
             const resolved = SUPPORTED_LANGS.includes(lang) ? lang : DEFAULT_LANG;
             current.textContent = LANG_SHORT[resolved] || LANG_SHORT[DEFAULT_LANG];
+            current.setAttribute('lang', resolved);
 
             options.forEach((option) => {
+                if (option.dataset.lang) {
+                    option.setAttribute('lang', option.dataset.lang);
+                }
                 const isSelected = option.dataset.lang === resolved;
                 option.setAttribute('aria-selected', String(isSelected));
             });
